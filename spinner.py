@@ -6,6 +6,7 @@ class Spinner:
         self.spinner = threading.Thread(target=self._spin)
         self.spinner.daemon = True
         self.spinning = False
+        self.freezeframe = 3
 
     def start(self):
         self.spinning = True
@@ -17,12 +18,12 @@ class Spinner:
 
     def _spin(self):
         while self.spinning:
-            print('\rLoading...', end='')
-            time.sleep(0.1)
-            print('\rLoading..', end='')
-            time.sleep(0.1)
-            print('\rLoading...', end='')
-            time.sleep(0.1)
+            print('\rAn old silent pond     ', end='')
+            time.sleep(self.freezeframe)
+            print('\rA frog jumps into the pond—', end='')
+            time.sleep(self.freezeframe)
+            print('\rSplash! Silence again.     ', end='')
+            time.sleep(self.freezeframe)
             print('\r', end='')
 
 if __name__ == '__main__':
