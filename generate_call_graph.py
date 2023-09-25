@@ -11,17 +11,28 @@ import sys
 
 graph_width="2000px"
 graph_height="1500px"
+font = '40px arial black'
+
+forbidden_names_list=[
+    "<builtin>*",
+    "numpy*",
+    "tkinter*",
+    "archive*",
+]
 
 color_filter={
-    "cli": "red",
-    "code_interpreters": "purple", 
-    "core": "darkblue",
-    "terminal_interface": "blue",
-    "lib": "green",
-    "llm": "red",
-    "rag": "orange",
-    "utils": "lightgreen",
+    "cli": "tan",
+    "code_interpreters": "darkred", 
+    "languages": "red",
+    "core": "yellow",
+    "terminal_interface": "darkgreen",
+    "components": "green",
+    "lib": "blue",
+    "llm": "indigo",
+    "rag": "violet",
+    "utils": "orange",
     "huggingface": "yellow",
+    "archive": "pink",
     "default": "black",
 }
 
@@ -64,7 +75,7 @@ def ntw_pyvis(ntx:nx.DiGraph, root, size0=5, loosen=2):
             "mass":mass,
             "size":size,
             "color":color,
-            "font": '30px arial black',
+            "font": font,
         }
         nt.add_node(node, **kwargs,)
 
@@ -129,11 +140,7 @@ with open(jsonfile,"r") as fin:
 
 ntx = to_ntwx_json(cgdata)
 ntx = remove_hyperconnect(ntx)
-ntx = remove_by_patterns(ntx, forbidden_names=[
-     "<builtin>*",
-     "numpy*",
-     "tkinter*"
-])
+ntx = remove_by_patterns(ntx, forbidden_names=forbidden_names_list)
 
     
 print(f"nodes: {ntx.number_of_nodes()}")
