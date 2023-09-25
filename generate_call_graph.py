@@ -10,7 +10,7 @@ import sys
 # pycg $(find interpreter -type f -name "*.py") -o callgraph.json
 
 graph_width="2000px"
-graph_height="1000px"
+graph_height="1500px"
 
 color_filter={
     "cli": "red",
@@ -64,6 +64,7 @@ def ntw_pyvis(ntx:nx.DiGraph, root, size0=5, loosen=2):
             "mass":mass,
             "size":size,
             "color":color,
+            "font": '30px arial black',
         }
         nt.add_node(node, **kwargs,)
 
