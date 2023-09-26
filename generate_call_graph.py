@@ -5,19 +5,39 @@ from pyvis.network import Network
 import fnmatch
 import sys
 
+"""Generate an HTML file with a call graph including controls for view rendering"""
+
+
 # FROM: https://cerfacs.fr/coop/pycallgraph
 # pip install graphviz networkx pyvis pycg
 # pycg $(find interpreter -type f -name "*.py") -o callgraph.json
+# pycg $(find . -name "*.py" -type f -and ! -path "./archive/*") -o callgraph.json
+# ./generate_call_graph.py '__init__' azure.json CGraph_20230925_init.html
+
+# G = nx.DiGraph()
+# print(dir(G))
+
+if len(sys.argv) > 1:
+    rootnode = sys.argv[1]
+    jsonfile = sys.argv[2]
+    outfile = sys.argv[3]
+else:
+    rootnode = "create_code_interpreter"
+    jsonfile = "callgraph.json"
+    outfile = "callgraph.html"
 
 graph_width="2000px"
 graph_height="1500px"
-font = '40px arial black'
+font = '50px arial black'
+root_font = '60px arial red'
 
 forbidden_names_list=[
     "<builtin>*",
-    "numpy*",
-    "tkinter*",
     "archive*",
+    "datetime*",
+    "os.*",
+    "argparse.*",
+    "ast.*",
 ]
 
 color_filter={
@@ -29,26 +49,18 @@ color_filter={
     "components": "green",
     "lib": "blue",
     "llm": "indigo",
-    "rag": "violet",
+    "rag": "gold",
     "utils": "orange",
     "huggingface": "yellow",
-    "archive": "pink",
+    "archive": "darkpink",
+    rootnode: "magenta",
     "default": "black",
 }
 
-if len(sys.argv) > 1:
-    rootnode = sys.argv[1]
-    jsonfile = sys.argv[2]
-    outfile = sys.argv[3]
-else:
-    rootnode = "create_code_interpreter"
-    jsonfile = "callgraph.json"
-    outfile = "callgraph.html"
     
 def to_ntwx_json(data: dict)->  nx.DiGraph:
-
+    """Build a nx.DiGraph from a dictionary"""
     nt = nx.DiGraph()
-
     def _ensure_key(name):
         if name not in nt:
             nt.add_node(name, size=50)
@@ -61,7 +73,9 @@ def to_ntwx_json(data: dict)->  nx.DiGraph:
 
 
 def ntw_pyvis(ntx:nx.DiGraph, root, size0=5, loosen=2):
+    """Display nx.DiGraph"""
     nt = Network(width=graph_width,height=graph_height, directed=True)
+
     for node in ntx.nodes:
         mass = ntx.nodes[node]["size"]/(loosen*size0)
         size = size0*ntx.nodes[node]["size"]**0.5
@@ -77,6 +91,11 @@ def ntw_pyvis(ntx:nx.DiGraph, root, size0=5, loosen=2):
             "color":color,
             "font": font,
         }
+        # Target node is special case
+        if rootnode in node:
+            kwargs['color'] = color_filter[rootnode]
+            kwargs['size'] = kwargs['size']*1.5
+            kwargs['font'] = root_font
         nt.add_node(node, **kwargs,)
 
     for link in ntx.edges:
@@ -85,23 +104,11 @@ def ntw_pyvis(ntx:nx.DiGraph, root, size0=5, loosen=2):
             width =max(size0,size0*(12 - 4*depth))
         except:
             width=5
-
         nt.add_edge(link[0], link[1], width=width)
 
     nt.show_buttons(filter_=["physics"])
     nt.show(outfile, notebook=False)
-
     
-def ntw_pyvis_simple(ntx:nx.DiGraph):
-    net = Network(width="1000px",height="1000px", directed=True)
-    for node in ntx.nodes:
-        #print(node)
-        net.add_node(node, **{"label":node},)
-
-    for edge in ntx.edges:
-        net.add_edge(edge[0], edge[1], width=1)
-    net.show('graph.html', notebook=False)
-
 
 def remove_hyperconnect(ntx: nx.DiGraph, treshold=5):
     """Remove hyperconnected nodes from the graph by incoming edges"""
@@ -113,6 +120,7 @@ def remove_hyperconnect(ntx: nx.DiGraph, treshold=5):
     for node in to_remove:
         ntx.remove_node(node)
     return ntx
+        
         
 def remove_by_patterns(ntx: nx.DiGraph,forbidden_names: list=[])-> nx.DiGraph:
     """Exclude nodes by name pattern matching"""
@@ -132,16 +140,44 @@ def remove_by_patterns(ntx: nx.DiGraph,forbidden_names: list=[])-> nx.DiGraph:
 
     return ntx
 
-# --- MAIN ---
+
+def pry(ntx: nx.DiGraph, mark="X"):
+    """Diagnostics"""
+    for node in ntx.nodes:
+        print(f"{mark}\t{node}\n<- {ntx.in_degree(node)} {ntx.in_edges(node)}\n->{ntx.out_degree(node)} {ntx.out_edges(node)}\n")
+
+def remove_underconnect(ntx: nx.DiGraph, treshold=1):
+    """Remove underconnected nodes from the graph if no edges"""
+    to_remove = []
+
+    for node in ntx.nodes:
+        if ntx.in_degree(node) == 0 and ntx.out_degree(node) == 0:
+            to_remove.append(node)
+
+    for node in to_remove:
+        ntx.remove_node(node)
+    return ntx
+    
+
+# =====--- MAIN ---=====
+
 
 with open(jsonfile,"r") as fin:
     cgdata = json.load(fin)
 
 
 ntx = to_ntwx_json(cgdata)
-ntx = remove_hyperconnect(ntx)
+original_node_cnt = ntx.number_of_nodes()
 ntx = remove_by_patterns(ntx, forbidden_names=forbidden_names_list)
+# pry(ntx)
+# print("\n\n--------------------------------\n\n")
+ntx = remove_underconnect(ntx)
+#ntx = remove_hyperconnect(ntx)
 
+# for ent in dir(ntx):
+#     print(ent)
     
-print(f"nodes: {ntx.number_of_nodes()}")
+# pry(ntx, "Y")
+diff = original_node_cnt - ntx.number_of_nodes()
+print(f"nodes[{ntx.number_of_nodes()}] = {original_node_cnt} - {diff}")
 ntw_pyvis(ntx, rootnode)
