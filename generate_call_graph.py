@@ -26,7 +26,7 @@ else:
     jsonfile = "callgraph.json"
     outfile = "callgraph.html"
 
-graph_width="2000px"
+graph_width="2500px"
 graph_height="1500px"
 font = '50px arial black'
 root_font = '60px arial red'
@@ -38,6 +38,8 @@ forbidden_names_list=[
     "os.*",
     "argparse.*",
     "ast.*",
+    "re.*",
+    "rich.*",
 ]
 
 color_filter={
