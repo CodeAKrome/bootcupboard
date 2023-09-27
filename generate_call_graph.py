@@ -72,13 +72,19 @@ def to_ntwx_json(data: dict)->  nx.DiGraph:
     return nt
 
 
-def ntw_pyvis(ntx:nx.DiGraph, root, size0=5, loosen=2):
+def ntw_pyvis(ntx:nx.DiGraph, root, size0=6, loosen=2):
     """Display nx.DiGraph"""
     nt = Network(width=graph_width,height=graph_height, directed=True)
 
     for node in ntx.nodes:
         mass = ntx.nodes[node]["size"]/(loosen*size0)
+
+
         size = size0*ntx.nodes[node]["size"]**0.5
+        connections = ntx.in_degree(node) + ntx.out_degree(node)
+        size = size0*connections
+
+        
         label = node
         color=color_filter["default"]
         for key in color_filter:
