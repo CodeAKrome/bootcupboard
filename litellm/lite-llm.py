@@ -4,15 +4,12 @@ import sys
 import time
 
 task = None
+model = "huggingface/PygmalionAI/metharme-1.3b"
+text = "Hello, how are you?"
 
 if len(sys.argv) > 1:
     model = "huggingface/" + sys.argv[1]
     text = sys.argv[2]
-else:
-    model = "huggingface/PygmalionAI/metharme-1.3b"
-    text = "Hello, how are you?"
-
-messages = [{ "content": text,"role": "user"}]
 
 def retry(func, iterations=13, naptime=3):
     """Retries a function until it succeeds or the number of iterations is reached.
