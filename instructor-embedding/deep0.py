@@ -19,7 +19,7 @@ hf_model = SentenceTransformer(hf_model_name)
 
 
 def seppuku(dbpath):
-    subprocess.run(['rm', '-Rf', dbpath], async=False)
+    subprocess.run(['rm', '-Rf', dbpath])
 
 # 切腹
 seppuku(dbpath)
@@ -58,6 +58,7 @@ def embedding_function(texts, instruction=instruction):
     if isinstance(texts, str):
         texts = [texts]
 
+    texts = [t.replace("\n", " ") for t in texts]
     out = []
     for text in texts:
         out.append(db_model.encode([instruction, text]))
@@ -81,12 +82,12 @@ for chunk in chunking(srctxt, CHUNK):
 
 #embeddings = embedding_function(chunked_text)
 
-#write(chunked_text, embedding_function)
+write(chunked_text, embedding_function)
 
 
 # for chunk in chunking(srctxt, CHUNK):
 #     print(f"->\t{chunk}\n{embedding_function(instruction, chunk)}\n")
 
-#query = "What are the seven considerations?"
-#answer = vector_store.search(embedding_data=query, embedding=embedding_function)
-#print(answer)
+query = "What are the seven considerations?"
+answer = vector_store.search(embedding_data=query, embedding_function=embedding_function)
+print(answer)
