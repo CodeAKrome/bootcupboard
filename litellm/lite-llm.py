@@ -5,11 +5,11 @@ import time
 
 task = None
 model = "huggingface/PygmalionAI/metharme-1.3b"
-text = "Hello, how are you?"
+messages = "Hello, how are you?"
 
 if len(sys.argv) > 1:
     model = "huggingface/" + sys.argv[1]
-    text = sys.argv[2]
+    messages = sys.argv[2]
 
 def retry(func, iterations=13, naptime=3):
     """Retries a function until it succeeds or the number of iterations is reached.
@@ -45,5 +45,7 @@ def closure_completion(model, messages, task):
         return (completion(model=model, messages=messages, task=task))
     return completion_closure
 
-print(f"model: {model}\n{retry(closure_completion(model, messages, task))}")
-
+#print(f"model: {model}\n{retry(closure_completion(model, messages, task))}")
+#out = completion(model=model, messages=messages, task=task)
+out = completion(model=model, messages=messages)
+print(out)
