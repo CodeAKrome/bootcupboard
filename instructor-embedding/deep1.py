@@ -1,15 +1,17 @@
 import chromadb
 from chromadb.utils import embedding_functions
 
-srctxt = 'artofwar.txt'
-collname = 'test'
-dbpath = 'db'
+srctxt = "artofwar.txt"
+collname = "test"
+dbpath = "db"
 CHUNK_SIZE = 512
-instruction = 'Represent the manual sentence for matching'
+instruction = "Represent the manual sentence for matching"
 
 client = chromadb.PersistentClient(path=dbpath)
-#ef = embedding_functions.InstructorEmbeddingFunction(model_name="hkunlp/instructor-xl", device="cuda", instruction=instruction)
-ef = embedding_functions.InstructorEmbeddingFunction(model_name="hkunlp/instructor-xl", instruction=instruction)
+# ef = embedding_functions.InstructorEmbeddingFunction(model_name="hkunlp/instructor-xl", device="cuda", instruction=instruction)
+ef = embedding_functions.InstructorEmbeddingFunction(
+    model_name="hkunlp/instructor-xl", instruction=instruction
+)
 
 try:
     client.delete_collection(collname)
@@ -23,22 +25,25 @@ except Exception as e:
 
 def chunking(file_path, chunk_size):
     # Split the input string into chunks by line
-    current_chunk = ''
-    with open(file_path, 'r') as f:
+    current_chunk = ""
+    with open(file_path, "r") as f:
         for line in f:
-            line = line.replace('\n', ' ')
-            line = line.replace('  ', ' ')
+            line = line.replace("\n", " ")
+            line = line.replace("  ", " ")
             remaining_space = chunk_size - len(current_chunk)
             if len(line) <= remaining_space:
-                current_chunk += line + ' '
+                current_chunk += line + " "
             else:
                 yield current_chunk.strip()
-                current_chunk = line + ' '
+                current_chunk = line + " "
                 if len(current_chunk) > chunk_size:
-                    raise ValueError("Chunk size is too small to accommodate a single line.")
+                    raise ValueError(
+                        "Chunk size is too small to accommodate a single line."
+                    )
             # Yield the last chunk if it's not empty
     if current_chunk:
         yield current_chunk.strip()
+
 
 chunked_text = []
 for chunk in chunking(srctxt, CHUNK_SIZE):

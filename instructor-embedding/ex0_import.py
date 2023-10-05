@@ -1,2 +1,3 @@
 from InstructorEmbedding import INSTRUCTOR
-model = INSTRUCTOR('hkunlp/instructor-large')
+
+model = INSTRUCTOR("hkunlp/instructor-large")
