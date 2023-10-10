@@ -1,4 +1,7 @@
 # Byte-compiled / optimized / DLL files
+instructor-embedding/db
+instructor-embedding/VuChromadb.py
+ENV
 db/*
 __pycache__/
 *.py[cod]

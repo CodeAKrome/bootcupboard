@@ -8,5 +8,7 @@ pkgs.mkShell {
     pkgs.git
     pkgs.emacs
     pkgs.gh
+    pkgs.nvtop
+    pkgs.moc
   ];
 }

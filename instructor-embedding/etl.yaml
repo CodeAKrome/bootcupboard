@@ -1,0 +1,10 @@
+default:
+  collection: default
+  database_file: db/chroma/default
+  debug_flags: []
+  instruction: Represent the sentences for retrieval
+  log_file: etl.log
+  max_size: 128
+  model_name: hkunlp/instructor-xl
+  sequence_tagger: flair/ner-english
+  token_model: gpt-4
