@@ -72,3 +72,27 @@ def test_self():
 
 if __name__ == "__main__":
     test_self()
+def runtime(func):
+    """Time function execution."""
+
+    def wrap_func(*args, **kwargs):
+        t1 = time()
+        result = func(*args, **kwargs)
+        t2 = time()
+        print(f"Function {func.__name__!r} executed in {(t2-t1):.4f}s")
+        return result
+
+    return wrap_func
+def debug_function(debug_flags):
+    """Print function name, inputs and outputs if the function name is in the debug_flags list"""
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            if function.__name__ in debug_flags:
+                print(f"\nInput to function {function.__name__}: {args}\n")
+                result = function(*args, **kwargs)
+                print(f"\nOutput of function {function.__name__}: {result}\n")
+                return result
+            else:
+                return function(*args, **kwargs)
+        return wrapper
+    return decorator
