@@ -1,4 +1,6 @@
 #!env python3
+"""Print the host name and the IP address of the wired ethernet interface"""
+
 import socket
 
 def gps():
