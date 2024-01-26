@@ -99,12 +99,17 @@ DEFAULT_DB_PATH = "db/chroma/default"
 DEFAULT_MODEL_NAME = "hkunlp/instructor-xl"
 DEFAULT_RESULTS = 3
 
+# Change this to use a different CUDA device or devices like 'cuda:0,1'
 if torch.cuda.is_available():
     flair.device = torch.device("cuda:0")
     device_name = "cuda"
 else:
-    flair.device = torch.device("cpu")
-    device_name = "cpu"
+    if torch.backends.mps.is_available():
+        flair.device = torch.device("mps")
+        device_name = "mps"
+    else:
+        flair.device = torch.device("cpu")
+        device_name = "cpu"
 
 
 class Rag(object):
