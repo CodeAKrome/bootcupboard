@@ -12,6 +12,7 @@ from litellm import token_counter, get_max_tokens
 import chromadb
 from chromadb.utils import embedding_functions
 import torch
+import icecream as ic
 
 # pip install ruamel.yaml ruamel.yaml.cmd litellm
 # to get a complete list, call litellm.model_list
@@ -44,8 +45,16 @@ def debug_function(debug_flags):
         return wrapper
     return decorator
 
+def trace(message:str, traces:list, output="stdout", file=None):
+    """Print program run trace information selectably to stdout, stderr or file"""
+    caller = inspect.stack()[1].frame
+    ic(f"Called from {caller.f_code.co_name}")
+    ic(f"my one {caller}")
+
 # --=={ END Utility Functions }==--
 
+trace("Initialized ETL class", [])
+exit()
 
 if torch.cuda.is_available():
     flair.device = torch.device("cuda:0")

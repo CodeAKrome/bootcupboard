@@ -12,6 +12,12 @@ from flair.models import SequenceTagger
 from time import time
 
 """
+Requirements:
+pip install fire flair torch chromadb tqdm InstructorEmbedding sentence_transformers
+"""
+
+
+"""
 FlamingChromAI
 
 USE A SINGLE CLIENT AT-A-TIME
@@ -230,7 +236,7 @@ class Rag(object):
         metadatas = []
         documents = []
         for sentence in tqdm(self.sentences(file)):
-            txt = sentence
+            txt = str(sentence)
             if re.match(r"^[A-Z]+\.?$", txt):
                 role = txt.replace(".", "")
                 continue
