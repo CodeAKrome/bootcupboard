@@ -9,6 +9,7 @@ __pycache__/
 .env.leave
 # C extensions
 *.so
+.DS_Store
 
 # Distribution / packaging
 .Python
