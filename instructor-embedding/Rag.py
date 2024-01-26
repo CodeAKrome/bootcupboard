@@ -10,10 +10,12 @@ import chromadb
 from chromadb.utils import embedding_functions
 from flair.models import SequenceTagger
 from time import time
+# import spacy
+# from litellm import token_counter
 
 """
 Requirements:
-pip install fire flair torch chromadb tqdm InstructorEmbedding sentence_transformers
+pip install fire flair torch chromadb tqdm InstructorEmbedding sentence_transformers litellm
 """
 
 
@@ -75,6 +77,7 @@ python Rag.py query --q="Falstaff" --where='{"role":"PAGE."}' --where_document='
 # ----- OUTSIDE CLASS -----
 
 
+
 def runtime(func):
     """Time function execution."""
 
@@ -98,6 +101,8 @@ DEFAULT_COLLECTION_NAME = "default"
 DEFAULT_DB_PATH = "db/chroma/default"
 DEFAULT_MODEL_NAME = "hkunlp/instructor-xl"
 DEFAULT_RESULTS = 3
+# Used for lemmatization
+#DEFAULT_SPACY_MODEL_NAME = 'en_core_web_sm'
 
 # Change this to use a different CUDA device or devices like 'cuda:0,1'
 if torch.cuda.is_available():
@@ -123,6 +128,7 @@ class Rag(object):
         model_name=DEFAULT_MODEL_NAME,
         device_name=device_name,
         chunk_size=DEFAULT_CHUNK_SIZE,
+        spacy_model_name = DEFAULT_SPACY_MODEL_NAME,
     ):
         self.instruction = instruction
         self.collection_name = collection_name
@@ -140,6 +146,23 @@ class Rag(object):
             embedding_function=self.embedding_function,
             metadata={"instruction": self.instruction},
         )
+        # Load the spaCy English model
+        if not spacy.util.is_package(spacy_model_name):
+            spacy.cli.download(spacy_model_name)
+        self.nlp = spacy.load(spacy_model_name)
+        self.spacy_model_name = spacy_model_name
+
+    def tokens(self, text: str):
+        messages = [{"user": "role", "content": text}]
+        return token_counter(model=self.model_name, messages=messages)
+
+
+    def lemmatized(self, text:str) -> str:
+        """Lemmatize the text using spaCy."""
+        doc = self.nlp(text)
+        lemmatized_tokens = [token.lemma_ for token in doc]
+        return ' '.join(lemmatized_tokens)
+
 
     def mmap_file(self, filepath):
         """Use memory mapping to MAINLINE an entire file."""
@@ -242,6 +265,12 @@ class Rag(object):
         documents = []
         for sentence in tqdm(self.sentences(file)):
             txt = str(sentence)
+            # pretxt = txt
+            # pretoke = self.tokens(txt)
+            # txt = self.lemmatized(txt)
+            # posttoke = self.tokens(txt)
+            # print(f"pre post: {pretoke} {pretxt}  {posttoke} {txt}")
+            
             if re.match(r"^[A-Z]+\.?$", txt):
                 role = txt.replace(".", "")
                 continue
