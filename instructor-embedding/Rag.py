@@ -18,43 +18,7 @@ Requirements:
 pip install fire flair torch chromadb tqdm InstructorEmbedding sentence_transformers litellm
 """
 
-
 """
-FlamingChromAI
-
-USE A SINGLE CLIENT AT-A-TIME
-Having many clients that are loading and saving to the same path can cause strange behavior including data deletion. As a general practice, create a Chroma client once in your application, and pass it around instead of creating many clients.
-
----
-141426 Oct  5 16:25  merry.txt
-
-
-binsize
-1
-Function 'rag' executed in 204.9514s
-14696448
-
-2
-Upserted: 1564
-Function 'rag' executed in 371.8764s
-7778304
-
-Block: 3
-1043it [01:35, 10.95it/s]
-Upserted: 1043
-Function 'rag' executed in 95.2679s
-5718016
-
-Block: 4
-782it [01:25,  9.17it/s]
-Upserted: 782
-Function 'rag' executed in 85.3032s
-4358144
-
-
----
-
-
 Pip install command:
 
 Poetry install command:
@@ -128,7 +92,7 @@ class Rag(object):
         model_name=DEFAULT_MODEL_NAME,
         device_name=device_name,
         chunk_size=DEFAULT_CHUNK_SIZE,
-        spacy_model_name = DEFAULT_SPACY_MODEL_NAME,
+#        spacy_model_name = DEFAULT_SPACY_MODEL_NAME,
     ):
         self.instruction = instruction
         self.collection_name = collection_name
