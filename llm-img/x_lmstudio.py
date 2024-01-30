@@ -12,7 +12,7 @@ client = OpenAI(base_url="http://localhost:1234/v1", api_key="not-needed")
 image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
 
 # Local file path of an image
-image_local = "kitteis.jpeg"
+image_local = "llm.png"
 
 
 # define the get_base_64_img function (this function is called in the completion)
@@ -53,7 +53,7 @@ completion = client.chat.completions.create(
           "type": "image_url",
           "image_url": {
             # replace the image_local with the variable to your image
-            "url": f"data:image/jpeg;base64,{get_base_64_img(image_url)}"
+            "url": f"data:image/jpeg;base64,{get_base_64_img(image_local)}"
           },
         },
       ],
