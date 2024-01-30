@@ -12,6 +12,11 @@ from flair.models import SequenceTagger
 from time import time
 # import spacy
 # from litellm import token_counter
+from flair.models import SequenceTagger
+from flair.data import Sentence
+from flair.nn import Classifier
+from flair.splitter import SegtokSentenceSplitter
+
 
 """
 Requirements:
@@ -65,6 +70,7 @@ DEFAULT_COLLECTION_NAME = "default"
 DEFAULT_DB_PATH = "db/chroma/default"
 DEFAULT_MODEL_NAME = "hkunlp/instructor-xl"
 DEFAULT_RESULTS = 3
+DEFAULT_SEQUENCE_TAGGER = "flair/ner-english-large"
 # Used for lemmatization
 #DEFAULT_SPACY_MODEL_NAME = 'en_core_web_sm'
 
@@ -111,10 +117,14 @@ class Rag(object):
             metadata={"instruction": self.instruction},
         )
         # Load the spaCy English model
-        if not spacy.util.is_package(spacy_model_name):
-            spacy.cli.download(spacy_model_name)
-        self.nlp = spacy.load(spacy_model_name)
-        self.spacy_model_name = spacy_model_name
+        # if not spacy.util.is_package(spacy_model_name):
+        #     spacy.cli.download(spacy_model_name)
+        # self.nlp = spacy.load(spacy_model_name)
+        # self.spacy_model_name = spacy_model_name
+#        self.sequence_tagger = SequenceTagger.load(DEFAULT_SEQUENCE_TAGGER)
+        self.splitter = SegtokSentenceSplitter()
+        self.link_tagger = Classifier.load('linker')
+                
 
     def tokens(self, text: str):
         messages = [{"user": "role", "content": text}]
@@ -384,7 +394,7 @@ class Rag(object):
         return {"name": ""}
 
     # NLP
-    def ner(self, file=DEFAULT_DOCUMENT):
+    def space_ner(self, file=DEFAULT_DOCUMENT):
         """🙀🙀 !!WORK IN PROGRESS!! 🙀🙀
         Return with named entity information."""
         tagger: SequenceTagger = SequenceTagger.load("ner")
@@ -392,6 +402,27 @@ class Rag(object):
         tagger.predict(sentences)
         for sentence in sentences:
             print(sentence.to_tagged_string())
+
+    def entities(self, text: str) -> list:
+        sentences = self.splitter.split(text)
+        self.link_tagger.predict(sentences)
+        out = []
+        for sentence in sentences:
+            #print(f"{sentence}")
+            spans = []
+
+            for span in sentence.get_spans():
+                #print(f"{span.start_position} : {span.end_position}")
+                for label in span.labels:
+                    #print(f"{span.text}\t{label.value}\t{label.score}")
+                    if label.value == '<unk>':
+                        val = ''
+                    else:
+                        val = label.value
+                    spans.append({'text': span.text, 'start': span.start_position, 'end': span.end_position, 'value': val, 'score': label.score})
+            out.append({'sentence': sentence.to_plain_string(), 'spans': spans})
+        return out
+        
 
 
 if __name__ == "__main__":
