@@ -3,8 +3,8 @@ from PIL import Image
 import requests
 import torch
 
-device="cuda:0" if torch.cuda.is_available() else "cpu"
-#device="mps"
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
+# device="mps"
 
 # load model and processor
 model_id = "adept/fuyu-8b"
@@ -18,7 +18,9 @@ image = Image.open(requests.get(url, stream=True).raw)
 inputs = processor(text=text_prompt, images=image, return_tensors="pt").to(device)
 
 generation_output = model.generate(**inputs, max_new_tokens=6)
-generation_text = processor.batch_decode(generation_output[:, -6:], skip_special_tokens=True)
+generation_text = processor.batch_decode(
+    generation_output[:, -6:], skip_special_tokens=True
+)
 
 print(f"{text_prompt} -> {generation_text}")
 
@@ -32,7 +34,9 @@ image = Image.open(requests.get(url, stream=True).raw)
 model_inputs = processor(text=text_prompt, images=image, return_tensors="pt").to(device)
 
 generation_output = model.generate(**model_inputs, max_new_tokens=16)
-generation_text = processor.batch_decode(generation_output[:, -16:], skip_special_tokens=True)
+generation_text = processor.batch_decode(
+    generation_output[:, -16:], skip_special_tokens=True
+)
 
 print(f"{text_prompt} -> {generation_text}")
 

@@ -30,39 +30,40 @@ def get_base_64_img(image):
     # Check if the image is a local file or a URL
     if "http" not in image:
         # Local File: Read the binary content of the file, encode it in base64, and decode as UTF-8
-        base64_image = base64.b64encode(open(image, "rb").read()).decode('utf-8')
+        base64_image = base64.b64encode(open(image, "rb").read()).decode("utf-8")
     else:
         # File on the Web: Fetch the image content from the URL, encode it in base64, and decode as UTF-8
         response = requests.get(image)
-        base64_image = base64.b64encode(response.content).decode('utf-8')
+        base64_image = base64.b64encode(response.content).decode("utf-8")
 
     # Return the base64-encoded image
     return base64_image
 
+
 # Create completion request (replace the variable image_local with your image)
 
 completion = client.chat.completions.create(
-  model="local-model", # not used
-  temperature=0, # set the temperature
-  messages=[
-    {
-      "role": "user",
-      "content": [
-        {"type": "text", "text": "What's in this image?"},
+    model="local-model",  # not used
+    temperature=0,  # set the temperature
+    messages=[
         {
-          "type": "image_url",
-          "image_url": {
-            # replace the image_local with the variable to your image
-            "url": f"data:image/jpeg;base64,{get_base_64_img(image_local)}"
-          },
-        },
-      ],
-    }
-  ],
-  max_tokens=1000,
-  stream=True
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        # replace the image_local with the variable to your image
+                        "url": f"data:image/jpeg;base64,{get_base_64_img(image_local)}"
+                    },
+                },
+            ],
+        }
+    ],
+    max_tokens=1000,
+    stream=True,
 )
 
 for chunk in completion:
-  if chunk.choices[0].delta.content:
-    print(chunk.choices[0].delta.content, end="", flush=True)
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)

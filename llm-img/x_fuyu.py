@@ -3,7 +3,7 @@ from PIL import Image
 import requests
 import torch
 
-device="cuda:0" if torch.cuda.is_available() else "cpu"
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 # load model and processor
 model_id = "adept/fuyu-8b"
@@ -19,8 +19,10 @@ inputs = processor(text=text_prompt, images=image, return_tensors="pt").to(devic
 
 # autoregressively generate text
 generation_output = model.generate(**inputs, max_new_tokens=7)
-generation_text = processor.batch_decode(generation_output[:, -7:], skip_special_tokens=True)
+generation_text = processor.batch_decode(
+    generation_output[:, -7:], skip_special_tokens=True
+)
 
 print(f"Generated: {generation_text}")
 
-assert generation_text == ['A blue bus parked on the side of a road.']
+assert generation_text == ["A blue bus parked on the side of a road."]
