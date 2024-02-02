@@ -5,6 +5,9 @@ import fire
 
 
 TEST_IMG_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
+PENGUINS = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
+BUS = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
+
 
 # define the get_base_64_img function (this function is called in the completion)
 def get_base_64_img(image):

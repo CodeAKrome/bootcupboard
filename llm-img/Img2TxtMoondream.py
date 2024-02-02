@@ -3,9 +3,12 @@ from PIL import Image
 import fire
 import requests
 
+PENGUINS = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
+BUS = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
 
+@profile
 def main(
-    image_path: str,
+    image_path: str = PENGUINS,
     question: str = "what is in this image?",
     model_id: str = "vikhyatk/moondream1",
 ):
