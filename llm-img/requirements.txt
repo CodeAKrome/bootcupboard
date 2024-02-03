@@ -2,3 +2,4 @@ openai
 transformers
 Pillow
 fire
+ollama
