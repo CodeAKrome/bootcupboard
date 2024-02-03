@@ -2,6 +2,7 @@ from llmlingua import PromptCompressor
 import torch
 
 TEST_PROMPT = """Question: Sam bought a dozen boxes, each with 30 highlighter pens inside, for $10 each box. He reanged five of boxes into packages of sixlters each and sold them $3 per. He sold the rest theters separately at the of three pens $2. How much did make in total, dollars?\nLets think step step\nSam bought 1 boxes x00 oflters.\nHe bought 12 * 300ters in total\nSam then took 5 boxes 6ters0ters.\nHe sold these boxes for 5 *5\nAfterelling these  boxes there were 3030 highlighters remaining.\nThese form 330 / 3 = 110 groups of three pens.\nHe sold each of these groups for $2 each, so made 110 * 2 = $220 from them.\nIn total, then, he earned $220 + $15 = $235.\nSince his original cost was $120, he earned $235 - $120 = $115 in profit.\nThe answer is 115"""
+TEST_PROMPT = """Amateur radio came into being after radio waves (proved to exist by Heinrich Rudolf Hertz in 1888) were adapted into a communication system in the 1890s by the Italian inventor Guglielmo Marconi. In the late 19th century there had been amateur wired telegraphers setting up their own interconnected telegraphic systems. Following Marconi's success many people began experimenting with this new form of "wireless telegraphy". Information on "Hertzian wave" based wireless telegraphy systems (the name "radio" would not come into common use until several years later) was sketchy, with magazines such as the November, 1901 issue of Amateur Work showing how to build a simple system based on Hertz' early experiments. Magazines show a continued progress by amateurs including a 1904 story on two Boston, Massachusetts 8th graders constructing a transmitter and receiver with a range of eight miles and a 1906 story about two Rhode Island teenagers building a wireless station in a chicken coop. In the US the first commercially produced wireless telegraphy transmitter / receiver systems became available to experimenters and amateurs in 1905. In 1908, students at Columbia University formed the Wireless Telegraph Club of Columbia University, now the Columbia University Amateur Radio Club. This is the earliest recorded formation of an amateur radio club, collegiate or otherwise. In 1910, the Amateurs of Australia formed, now the Wireless Institute of Australia."""
 
 device = (
     "cuda"
@@ -31,7 +32,7 @@ llm_lingua = PromptCompressor(
 )
 
 compressed_prompt = llm_lingua.compress_prompt(
-    TEST_PROMPT, instruction="", question="", target_token=200, 
+    TEST_PROMPT, instruction="", question="", target_token=100, 
 )
 
 # > {'compressed_prompt': 'Question: Sam bought a dozen boxes, each with 30 highlighter pens inside, for $10 each box. He reanged five of boxes into packages of sixlters each and sold them $3 per. He sold the rest theters separately at the of three pens $2. How much did make in total, dollars?\nLets think step step\nSam bought 1 boxes x00 oflters.\nHe bought 12 * 300ters in total\nSam then took 5 boxes 6ters0ters.\nHe sold these boxes for 5 *5\nAfterelling these  boxes there were 3030 highlighters remaining.\nThese form 330 / 3 = 110 groups of three pens.\nHe sold each of these groups for $2 each, so made 110 * 2 = $220 from them.\nIn total, then, he earned $220 + $15 = $235.\nSince his original cost was $120, he earned $235 - $120 = $115 in profit.\nThe answer is 115',

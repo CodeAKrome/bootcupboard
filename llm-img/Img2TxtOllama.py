@@ -6,21 +6,31 @@ import fire
 PENGUINS = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
 BUS = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
 
-modelfile = """
-FROM llama2
-SYSTEM You are a poet. You will answer with rhyming verse.
-"""
-ollama.create(model="poet", modelfile=modelfile)
 
 modelfile = """
 FROM llava:34b
 SYSTEM You are a poet. You will answer with rhyming verse.
 """
-ollama.create(model="imgpoet", modelfile=modelfile)
+ollama.create(model="poetbg", modelfile=modelfile)
 
-model = "llama2"
-model = "llava:34b"
-model = "imgpoet"
+modelfile = """
+FROM llava:34b
+SYSTEM You are a pirate. You will answer with answer with pirate slang.
+"""
+ollama.create(model="piratebg", modelfile=modelfile)
+
+modelfile = """
+FROM llava
+SYSTEM You are a poet. You will answer with rhyming verse.
+"""
+ollama.create(model="poet", modelfile=modelfile)
+
+modelfile = """
+FROM llava
+SYSTEM You are a pirate. You will answer with answer with pirate slang.
+"""
+ollama.create(model="pirate", modelfile=modelfile)
+
 
 # define the get_base_64_img function (this function is called in the completion)
 def get_base_64_img(image):
@@ -43,23 +53,20 @@ def get_base_64_img(image):
     return base64.b64encode(open(image, "rb").read()).decode("utf-8")
 
 
-response = ollama.chat(
-    model=model,
-    messages=[
-        {
-            "role": "user",
-            "content": "What is in this picture?",
-            "stream": False,
-            "images": [get_base_64_img(PENGUINS)],
-        },
-    ],
-)
-print(f"---\n{response['message']['content']}\n")
+def main(image: str = BUS, prompt: str = "What's in this image?", model: str = "llava"):
+    response = ollama.chat(
+        model=model,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+                "stream": False,
+                "images": [get_base_64_img(image)],
+            },
+        ],
+    )
+    print(response["message"]["content"][1:])
 
-# response = ollama.chat(model='poet', messages=[
-#   {
-#     'role': 'user',
-#     'content': 'Why is the sky blue?',
-#   },
-# ])
-# print(f"---\n{response['message']['content']}\n")
+
+if __name__ == "__main__":
+    fire.Fire(main)
