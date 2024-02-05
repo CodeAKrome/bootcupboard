@@ -25,11 +25,11 @@ NER_TAGGER = 'ner-ontonotes-large'
 
 def get_ner(text: str) -> list:
     splitter = SegtokSentenceSplitter()
-    link_tagger = Classifier.load("linker")
+#    link_tagger = Classifier.load("linker")
     tsc = TargetSentimentClassifier()
 
     sentences = splitter.split(text)
-    link_tagger.predict(sentences)
+#    link_tagger.predict(sentences)
 
     sentiment_tagger = Classifier.load('sentiment')
     ner_tagger = Classifier.load(NER_TAGGER)
