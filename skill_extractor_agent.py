@@ -9,7 +9,7 @@ def get_persistent_process(start_cmd: str):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        bufsize=0
+        bufsize=0,
     )
     return process
 
@@ -34,7 +34,7 @@ class BaseInterpreter:
             except Exception:
                 traceback_string = traceback.format_exc()
                 return {"status": "error", "stdout": "", "stderr": traceback_string}
-        
+
         stdout, stderr = "", ""
         try:
             stdout, stderr = self.process.communicate(input=query)

@@ -24,19 +24,13 @@ NER_TAGGER = 'ner-ontonotes-large'
 
 
 def get_ner(text: str) -> list:
-    splitter = SegtokSentenceSplitter()
-#    link_tagger = Classifier.load("linker")
-    tsc = TargetSentimentClassifier()
-
-    sentences = splitter.split(text)
-#    link_tagger.predict(sentences)
-
     sentiment_tagger = Classifier.load('sentiment')
     ner_tagger = Classifier.load(NER_TAGGER)
-    # run sentiment analysis over sentence
+    splitter = SegtokSentenceSplitter()
+    tsc = TargetSentimentClassifier()
+    sentences = splitter.split(text)
     sentiment_tagger.predict(sentences)
     ner_tagger.predict(sentences)
-
 
     out = []
     for sentence in sentences:
@@ -63,7 +57,7 @@ def get_ner(text: str) -> list:
                         "probability": f"{sentiment[0]['class_prob']:.2f}",
                     }
                 )
-        out.append({"sentence": sent, "spans": spans})
+        out.append({"sentence": sent, "tag": sentence.tag.lower(), "score": f"{sentence.score:.2f}", "spans": spans})
     return out
 
 

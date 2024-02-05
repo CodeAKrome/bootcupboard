@@ -1,6 +1,7 @@
 import threading
 import time
 
+
 class Spinner:
     def __init__(self):
         self.spinner = threading.Thread(target=self._spin)
@@ -18,15 +19,16 @@ class Spinner:
 
     def _spin(self):
         while self.spinning:
-            print('\rAn old silent pond     ', end='')
+            print("\rAn old silent pond     ", end="")
             time.sleep(self.freezeframe)
-            print('\rA frog jumps into the pond—', end='')
+            print("\rA frog jumps into the pond—", end="")
             time.sleep(self.freezeframe)
-            print('\rSplash! Silence again.     ', end='')
+            print("\rSplash! Silence again.     ", end="")
             time.sleep(self.freezeframe)
-            print('\r', end='')
+            print("\r", end="")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     spinner = Spinner()
 
     spinner.start()
