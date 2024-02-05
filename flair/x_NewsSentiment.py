@@ -1,7 +1,7 @@
 from flair.data import Sentence
 from flair.nn import Classifier
 from flair.splitter import SegtokSentenceSplitter
-from flair.models import SequenceTagger
+#from flair.models import SequenceTagger
 from NewsSentiment import TargetSentimentClassifier
 
 from json import dumps
@@ -20,14 +20,24 @@ SENTENCE = "Russian forces are carrying out required operational and combat meas
 
 # init
 
-splitter = SegtokSentenceSplitter()
-link_tagger = Classifier.load("linker")
-tsc = TargetSentimentClassifier()
+NER_TAGGER = 'ner-ontonotes-large'
 
 
-def get_ner(text: str, splitter: SegtokSentenceSplitter, tagger) -> list:
+def get_ner(text: str) -> list:
+    splitter = SegtokSentenceSplitter()
+    link_tagger = Classifier.load("linker")
+    tsc = TargetSentimentClassifier()
+
     sentences = splitter.split(text)
-    tagger.predict(sentences)
+    link_tagger.predict(sentences)
+
+    sentiment_tagger = Classifier.load('sentiment')
+    ner_tagger = Classifier.load(NER_TAGGER)
+    # run sentiment analysis over sentence
+    sentiment_tagger.predict(sentences)
+    ner_tagger.predict(sentences)
+
+
     out = []
     for sentence in sentences:
         spans = []
@@ -59,7 +69,7 @@ def get_ner(text: str, splitter: SegtokSentenceSplitter, tagger) -> list:
 
 # --- MAIN ---
 
-out = get_ner(TEXT, splitter, link_tagger)
+out = get_ner(TEXT)
 for rec in out:
     print(dumps(rec, indent=True))
 
