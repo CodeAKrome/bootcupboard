@@ -3,7 +3,7 @@ from flair.nn import Classifier
 from flair.splitter import SegtokSentenceSplitter
 #from flair.models import SequenceTagger
 from NewsSentiment import TargetSentimentClassifier
-
+import sys
 from json import dumps
 
 # Constants
@@ -60,10 +60,19 @@ def get_ner(text: str) -> list:
         out.append({"sentence": sent, "tag": sentence.tag.lower(), "score": f"{sentence.score:.2f}", "spans": spans})
     return out
 
+def read_stdin():
+    content = ''
+    while True:
+        try:
+            chunk = sys.stdin.buffer.read(4096)  # Read up to 4KB at a time
+            content += chunk.decode('utf-8')
+        except ValueError:  # End of file reached, no more data to read
+            break
+    return content
 
 # --- MAIN ---
 
-out = get_ner(TEXT)
+out = get_ner(sys.stdin.read())
 for rec in out:
     print(dumps(rec, indent=True))
 
