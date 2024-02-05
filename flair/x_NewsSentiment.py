@@ -1,7 +1,8 @@
 from flair.data import Sentence
 from flair.nn import Classifier
 from flair.splitter import SegtokSentenceSplitter
-#from flair.models import SequenceTagger
+
+# from flair.models import SequenceTagger
 from NewsSentiment import TargetSentimentClassifier
 import sys
 from json import dumps
@@ -20,11 +21,11 @@ SENTENCE = "Russian forces are carrying out required operational and combat meas
 
 # init
 
-NER_TAGGER = 'ner-ontonotes-large'
+NER_TAGGER = "ner-ontonotes-large"
 
 
 def get_ner(text: str) -> list:
-    sentiment_tagger = Classifier.load('sentiment')
+    sentiment_tagger = Classifier.load("sentiment")
     ner_tagger = Classifier.load(NER_TAGGER)
     splitter = SegtokSentenceSplitter()
     tsc = TargetSentimentClassifier()
@@ -57,18 +58,16 @@ def get_ner(text: str) -> list:
                         "probability": f"{sentiment[0]['class_prob']:.2f}",
                     }
                 )
-        out.append({"sentence": sent, "tag": sentence.tag.lower(), "score": f"{sentence.score:.2f}", "spans": spans})
+        out.append(
+            {
+                "sentence": sent,
+                "tag": sentence.tag.lower(),
+                "score": f"{sentence.score:.2f}",
+                "spans": spans,
+            }
+        )
     return out
 
-def read_stdin():
-    content = ''
-    while True:
-        try:
-            chunk = sys.stdin.buffer.read(4096)  # Read up to 4KB at a time
-            content += chunk.decode('utf-8')
-        except ValueError:  # End of file reached, no more data to read
-            break
-    return content
 
 # --- MAIN ---
 
