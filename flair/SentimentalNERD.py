@@ -1,4 +1,4 @@
-from flair.data import Sentence
+#from flair.data import Sentence
 from flair.nn import Classifier
 from flair.splitter import SegtokSentenceSplitter
 from NewsSentiment import TargetSentimentClassifier
@@ -51,7 +51,7 @@ from json import dumps
 NER_TAGGER = "flair/ner-english-large"
 
 
-def get_ner(text: str) -> list:
+def nerd_tsc(text: str) -> list:
     sentiment_tagger = Classifier.load("sentiment")
     ner_tagger = Classifier.load(NER_TAGGER)
     splitter = SegtokSentenceSplitter()
@@ -98,6 +98,6 @@ def get_ner(text: str) -> list:
 
 # --- MAIN ---
 
-out = get_ner(sys.stdin.read())
+out = nerd_tsc(sys.stdin.read())
 for rec in out:
     print(dumps(rec, indent=True))
