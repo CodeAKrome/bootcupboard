@@ -1,7 +1,7 @@
 from ruamel.yaml import YAML
 import sys
 
-yaml = YAML(typ="unsafe")
+yaml = YAML(typ="safe")
 # yaml.dump({"default":{"a":1,"b":2}}, sys.stdout)
 out = yaml.load(open("test.yaml", "r"))
 
