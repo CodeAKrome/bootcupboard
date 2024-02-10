@@ -1,0 +1,40 @@
+Here is a simple Streamlit application that interacts with Ollama to generate responses from different models. Please note that you would need to install `streamlit`, `torch` and `ollama` libraries in your Python environment before running this app. 
+
+```python
+import streamlit as st
+from ollama import Client
+
+# Create a client with your Ollama API key
+client = Client("Your_Ollama_API_Key")
+
+st.title("Large Language Models (LLMs) Demo with Ollama")
+
+models = ["model1", "model2", "model3"]  # Replace these with the names of your downloaded models
+selected_models = st.multiselect("Select Model(s):", models + ["All"], default="All")
+
+system_message = st.text_area("System Message:")
+prompt = st.text_area("Prompt:")
+temperature = st.number_input("Temperature (0-2, defaults to 1):", min_value=0.0, max_value=2.0, value=1.0)
+top_p = st.number_input("Top P (defaults to 1):", value=1.0)
+repetition_penalty = st.number_input("Repetition Penalty (defaults to 1):", value=1.0)
+max_tokens = st.number_input("Max Tokens:", min_value=1, max_value=2048, value=50)
+stop_sequences = st.text_area("Stop Sequences (comma separated):")
+stop_sequences = [seq.strip() for seq in stop_sequences.split(",")] if stop_sequences else None
+
+if st.button("Generate"):
+    models_to_run = selected_models if "All" not in selected_models else models
+    
+    responses = {}
+    for model in models_to_run:
+        result = client.generate(system_message, prompt, 
+                                 temperature=temperature, top_p=top_p, repetition_penalty=repetition_penalty, 
+                                 max_tokens=max_tokens, stop_sequences=stop_sequences)
+        responses[model] = result
+        
+    st.write("Generated Responses:")
+    
+    for model, response in responses.items():
+        with st.expander(f"Response from Model {model}", expanded=True):
+            st.text_area("Copy the following text:", value=response)
+```
+This is a very basic version of your app and doesn't include error handling or other features that are necessary for a production-level application. You would want to add appropriate checks, error messages, etc. Also, please replace `"Your_Ollama_API_Key"` with your actual Ollama API key.

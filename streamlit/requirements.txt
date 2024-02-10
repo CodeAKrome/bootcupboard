@@ -1,0 +1,4 @@
+streamlit
+spacy
+watchdog
+spacy_streamlit
