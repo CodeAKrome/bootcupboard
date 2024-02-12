@@ -1,0 +1,5 @@
+icecream
+llama_index
+pypdf[image]
+flair
+fire
