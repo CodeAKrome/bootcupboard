@@ -2,7 +2,7 @@ from neo4j import GraphDatabase
 
 # URI examples: "neo4j://localhost", "neo4j+s://xxx.databases.neo4j.io"
 URI = "neo4j://localhost"
-AUTH = ("neo4j", "N0Baldric")
+AUTH = ("neo4j", "inojoe")
 
 data = [
     {"feed":"feed0", "title":"title0", "text":"article0", "tags":["tag0","tag1"]},
