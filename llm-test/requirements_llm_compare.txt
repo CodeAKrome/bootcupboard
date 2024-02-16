@@ -1,0 +1,8 @@
+bitsandbytes
+transformers
+accelerate
+einops
+safetensors
+xformers
+scipy
+flash-attn
