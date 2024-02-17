@@ -20,13 +20,13 @@ models =   [
         device_map='auto',
         trust_remote_code=True,
         torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+#         attn_implementation="flash_attention_2",
         cache_dir="./.cache",
         )
 ]
 
 tokenizers = [
-    AutoTokenizer.from_pretrained(model_names[0], cache_dir="./.cache", use_fast=True)
+    AutoTokenizer.from_pretrained(model_names[0], cache_dir="./.cache", use_fast=True )
 ]
 
 if hasattr(tokenizers[0], 'chat_template') and tokenizers[0].chat_template:

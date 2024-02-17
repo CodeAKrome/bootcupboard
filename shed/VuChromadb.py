@@ -2,27 +2,42 @@ import curses
 import chromadb
 import sys
 
-# Mocked Chroma database data
-collections = ["Collection1", "Collection2", "Collection3"]
-records = {
-    "Collection1": ["Record1", "Record2", "Record3"],
-    "Collection2": ["RecordA", "RecordB", "RecordC"],
-    "Collection3": ["DataX", "DataY", "DataZ"],
-}
+# Do you Mock me, Sir?
+# Faux Chroma database data
+# collections = ["Collection1", "Collection2", "Collection3"]
+# records = {}
+# for c in collections:
+#     records[c] = []
+#     tids = [c+"ID1", c+"ID2", c+"ID3"]
+#     tdocs = [c+"Doc1", c+"Doc2", c+"Doc3"]
+#     tmeta = [c+"Metadata1", c+"Metadata2", c+"Metadata3"]
+#     for i, d, m in zip(tids, tdocs, tmeta):
+#         records[c].append({"id":i,"doc":d,"meta":m})
+
 
 records = {}
-client = chromadb.PersistentClient(path=sys.argv[1])
+try: 
+    client = chromadb.PersistentClient(path=sys.argv[1])
+except Exception as e:
+    print("Error:", e)
+    sys.exit(1)
+    
 colls = client.list_collections()
+print("Num Collections: ", len(colls))
 collections = [c.name for c in colls]
 for collection in collections:
-    records[collection] = []
+    print("Collection: ", collection)
     cc_handle = client.get_collection(collection)
     data = cc_handle.get()
-    docs = data["documents"]
-    meta = data["metadatas"]
-    ids = data["ids"]
-    for i, d, m in zip(ids, docs, meta):
-        records[collection].append({"id":i,"doc":d,"meta":m})
+    n = len(data)
+    if n > 0:
+        print("Num Records: ", n)
+        records[collection] = []
+        ids = data["ids"]
+        docs = data["documents"]
+        meta = data["metadatas"]
+        for i, d, m in zip(ids, docs, meta):
+            records[collection].append({"id":i,"doc":d,"meta":m})
 
 def main(stdscr):
     curses.curs_set(0)  # Hide the cursor
@@ -35,22 +50,16 @@ def main(stdscr):
 
     while True:
         stdscr.clear()
-
         # Get the current collection and its records
         current_collection = collections[current_collection_index]
         current_records = records[current_collection]
-
-        # Display the current collection name at the top
-#        stdscr.addstr(0, 0, f"Current Collection: {current_collection}")
-
+        n = len(current_records)
         # Display the current collection name at the top of the page, highlighted in bold.
-#        stdscr.addstr(0, 0, "Current collection: **{}**".format(current_collection.name), curses.A_BOLD)
-        stdscr.addstr(0, 0, "Current collection: **{}**".format(current_collection), curses.color_pair(1))
-
+        stdscr.addstr(0, 0, f"{current_collection} {current_record_index} / {n}", curses.color_pair(1))
         # --=={ Display the current record }==--
         current_record = current_records[current_record_index]
-
         stdscr.addstr(2, 0, f"{current_record['id']}")
+        # indentation
         i = 3
         for k in current_record.keys():
             if k == "doc" or k =="id":
@@ -67,15 +76,6 @@ def main(stdscr):
                 stdscr.addstr(i, len(k) + 1, f"{current_record[k]}", curses.color_pair(1))
             i += 1
         stdscr.addstr(i, 0, f"{current_record['doc']}", curses.color_pair(2))
-#        stdscr.addstr(2, 0, f"{current_record['id']}\n{current_record}")
-        # recs = []
-        # for k in current_record.keys():
-        #     recs.append((f"{k}\t{current_record[k]}"))
-        # recstr = "\n".join(recs)
-        # stdscr.addstr(2, 0, f"{current_record['id']}\n{recstr}")
-
-
-
 
         # --=={ MAIN }==--
 

@@ -324,6 +324,8 @@ class Rag(object):
         where={},
         where_document={},
     ):
+        print(f"Query: {q}")
+        
         """Return raw chroma results."""
         if collection_name:
             self.get_collection(collection_name)
