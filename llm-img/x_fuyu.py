@@ -13,7 +13,7 @@ model = FuyuForCausalLM.from_pretrained(model_id, device_map=device)
 # prepare inputs for the model
 text_prompt = "Generate a coco-style caption.\n"
 url = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
-image = Image.open(requests.get(url, stream=True).raw)
+image = Image.open(requests.get(url, stream=True, timeout=60).raw)
 
 inputs = processor(text=text_prompt, images=image, return_tensors="pt").to(device)
 

@@ -33,7 +33,7 @@ def get_base_64_img(image):
         base64_image = base64.b64encode(open(image, "rb").read()).decode("utf-8")
     else:
         # File on the Web: Fetch the image content from the URL, encode it in base64, and decode as UTF-8
-        response = requests.get(image)
+        response = requests.get(image, timeout=60)
         base64_image = base64.b64encode(response.content).decode("utf-8")
 
     # Return the base64-encoded image
