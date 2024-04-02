@@ -10,7 +10,7 @@
 # Here is some sample code that demonstrates how you might implement these functions:
 # ```python
 import turtle  # for graphics
-import random  # for random number generation
+import secrets
 
 class Snake:
     def __init__(self, x, y, direction):
@@ -33,9 +33,9 @@ class Snake:
         self.length += 1
 
 def create_snake():
-    x = random.randint(-250, 250)
-    y = random.randint(-250, 250)
-    direction = random.choice(['up', 'down', 'left', 'right'])
+    x = secrets.SystemRandom().randint(-250, 250)
+    y = secrets.SystemRandom().randint(-250, 250)
+    direction = secrets.SystemRandom().choice(['up', 'down', 'left', 'right'])
     return Snake(x, y, direction)
 
 def move_snake():
