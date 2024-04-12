@@ -48,7 +48,7 @@ while True:
 
     if snake[0] == food:
         food = None
-        while food is None:
+        while food == None:
             nf = [
                 random.randint(1, sh-1),
                 random.randint(1, sw-1)
