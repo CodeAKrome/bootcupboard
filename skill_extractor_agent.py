@@ -1,10 +1,10 @@
 import subprocess
 import traceback
+from security import safe_command
 
 
 def get_persistent_process(start_cmd: str):
-    process = subprocess.Popen(
-        args=start_cmd.split(),
+    process = safe_command.run(subprocess.Popen, args=start_cmd.split(),
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
