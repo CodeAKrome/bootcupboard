@@ -8,14 +8,13 @@ import torch
 from tqdm import trange, tqdm
 import chromadb
 from chromadb.utils import embedding_functions
-from flair.models import SequenceTagger
 from time import time
 # import spacy
 # from litellm import token_counter
-from flair.models import SequenceTagger
 from flair.data import Sentence
 from flair.nn import Classifier
 from flair.splitter import SegtokSentenceSplitter
+from flair.models import SequenceTagger
 
 
 """
@@ -87,6 +86,8 @@ else:
         device_name = "cpu"
 
 
+# <--=={ RAG }==-->
+
 class Rag(object):
     """Vector similarity search with chromadb and NER using flair."""
 
@@ -111,11 +112,18 @@ class Rag(object):
             device=self.device_name,
             instruction=self.instruction,
         )
+        # self.retriever_model = ChromadbRM(
+        #     self.collection_name,
+        #     self.database_path,
+        #     embedding_functions = self.embedding_function,
+        #     k = DEFAULT_RESULTS,
+        # )
         self.coll = self.client.get_or_create_collection(
             name=self.collection_name,
             embedding_function=self.embedding_function,
             metadata={"instruction": self.instruction},
         )
+        self.collections = [c.name for c in self.client.list_collections()]
         # Load the spaCy English model
         # if not spacy.util.is_package(spacy_model_name):
         #     spacy.cli.download(spacy_model_name)
@@ -222,6 +230,15 @@ class Rag(object):
             i += 1
         print(f"Upserted {i} records.")
 
+    def get_actor_lines(self, line):
+        """Get the actor and the line."""
+        #print(f"\n->{line}<-")
+        matches = re.findall(r"^([A-Z]+)\.", line)
+        if matches:
+            return matches[0], ''
+        else:
+            return False, line
+
     @runtime
     def playraghog(self, file=DEFAULT_DOCUMENT, collection_name=False, batch_size=5):
         """This requires boatloads of memory.
@@ -238,16 +255,21 @@ class Rag(object):
         metadatas = []
         documents = []
         for sentence in tqdm(self.sentences(file)):
-            txt = str(sentence)
+            txt = sentence.text
             # pretxt = txt
             # pretoke = self.tokens(txt)
             # txt = self.lemmatized(txt)
             # posttoke = self.tokens(txt)
             # print(f"pre post: {pretoke} {pretxt}  {posttoke} {txt}")
             
-            if re.match(r"^[A-Z]+\.?$", txt):
-                role = txt.replace(".", "")
-                continue
+            # if re.match(r"^\s+[A-Z]+\.", txt):
+            #     role = txt.replace(".", "")
+            #     continue
+            thisrole, line = self.get_actor_lines(txt)
+            if thisrole:
+                role = thisrole
+                txt = line
+            
             ids.append(f"{file}:{i}")
             metadatas.append({"role": role})
             documents.append(txt)
@@ -301,7 +323,7 @@ class Rag(object):
     def query_json(
         self,
         q=DEFAULT_QUERY,
-        collection_name=False,
+        collection_name=DEFAULT_COLLECTION_NAME,
         n=DEFAULT_RESULTS,
         where={},
         where_document={},
@@ -316,24 +338,29 @@ class Rag(object):
         out = results["documents"][0]
         return out
 
+    def test(self, a='a', b='b'):
+        print(f"a {a} b {b}")
+
     def query(
         self,
         q=DEFAULT_QUERY,
-        collection_name=False,
+        col=DEFAULT_COLLECTION_NAME,
         n=DEFAULT_RESULTS,
         where={},
-        where_document={},
+        where_document={}
     ):
-        print(f"Query: {q}")
+        col = "sm_merry"
+        print(f"C {col} Q {q}")
         
         """Return raw chroma results."""
-        if collection_name:
-            self.get_collection(collection_name)
+        if not col in self.collections:
+            raise ValueError(f"Collection {col} not in {self.collections}!")
+        self.get_collection(col)
         return self.coll.query(
             query_texts=[q],
             n_results=n,
-            where=where,
-            where_document=where_document,
+            # where=where,
+            # where_document=where_document,
         )
 
     def list_collections(self):
@@ -349,7 +376,7 @@ class Rag(object):
     def get_collection(self, collection_name=DEFAULT_COLLECTION_NAME):
         """Actually get a collection."""
         self.coll = self.client.get_collection(
-            collection_name, metadata={"instruction": self.instruction}
+            collection_name
         )
         self.collection_name = collection_name
 
@@ -395,7 +422,7 @@ class Rag(object):
             self.coll.modify(metadata=metadata)
         return {"name": ""}
 
-    # NLP
+    # --=={ NLP }==--
     def space_ner(self, file=DEFAULT_DOCUMENT):
         """🙀🙀 !!WORK IN PROGRESS!! 🙀🙀
         Return with named entity information."""
