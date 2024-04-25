@@ -3,3 +3,7 @@ transformers
 Pillow
 fire
 ollama
+torch
+torchvision
+einops
+timm
