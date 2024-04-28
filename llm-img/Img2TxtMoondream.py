@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, CodeGenTokenizerFast as Tokenizer
 from PIL import Image
 import fire
-import requests
+from security import safe_requests
 
 PENGUINS = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
 BUS = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
@@ -16,7 +16,7 @@ def main(
     tokenizer = Tokenizer.from_pretrained(model_id)
     if image_path.startswith("http"):
         url = image_path
-        image = Image.open(requests.get(url, stream=True).raw)
+        image = Image.open(safe_requests.get(url, stream=True).raw)
     else:
         image = Image.open(image_path)
     enc_image = model.encode_image(image)

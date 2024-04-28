@@ -1,6 +1,6 @@
 from openai import OpenAI
 import base64
-import requests
+from security import safe_requests
 
 # Initialize OpenAI client with a custom local server and a placeholder API key (not needed for local server)
 # Note: The API key is not required for a local server, as indicated by "not-needed"
@@ -33,7 +33,7 @@ def get_base_64_img(image):
         base64_image = base64.b64encode(open(image, "rb").read()).decode("utf-8")
     else:
         # File on the Web: Fetch the image content from the URL, encode it in base64, and decode as UTF-8
-        response = requests.get(image)
+        response = safe_requests.get(image)
         base64_image = base64.b64encode(response.content).decode("utf-8")
 
     # Return the base64-encoded image
