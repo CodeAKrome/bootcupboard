@@ -71,7 +71,7 @@ class ETL:
         device_name=DEVICE_NAME,
     ):
         # unsafe allows read/write
-        self.yaml = YAML(typ="unsafe")
+        self.yaml = YAML(typ="safe")
         self.config_file = config_file
         self.config_name = config_name
         if os.path.exists(config_file):
