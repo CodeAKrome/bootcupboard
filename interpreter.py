@@ -168,7 +168,7 @@ class Interpreter:
             url = "https://open-procedures.replit.app/search/"
 
             try:
-                relevant_procedures = requests.get(url, data=json.dumps(query)).json()[
+                relevant_procedures = requests.get(url, data=json.dumps(query), timeout=60).json()[
                     "procedures"
                 ]
                 info += (

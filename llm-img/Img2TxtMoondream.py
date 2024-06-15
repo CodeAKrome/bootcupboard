@@ -16,7 +16,7 @@ def main(
     tokenizer = Tokenizer.from_pretrained(model_id)
     if image_path.startswith("http"):
         url = image_path
-        image = Image.open(requests.get(url, stream=True).raw)
+        image = Image.open(requests.get(url, stream=True, timeout=60).raw)
     else:
         image = Image.open(image_path)
     enc_image = model.encode_image(image)

@@ -5,7 +5,7 @@ import sys
 
 def search_arxiv(subject):
     url = f"https://arxiv.org/search/?query={subject}&searchtype=all&source=header"
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
     soup = BeautifulSoup(response.content, 'html.parser')
     titles = [t.text for t in soup.find_all('p', {'class': 'title'})]
     abstracts = [a.text for a in soup.find_all('span', {'class': 'abstract-full has-text-grey-dark mathjax'})]

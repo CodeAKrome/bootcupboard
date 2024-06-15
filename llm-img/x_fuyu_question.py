@@ -13,7 +13,7 @@ model = FuyuForCausalLM.from_pretrained(model_id, device_map=device)
 
 text_prompt = "What color is the bus?\n"
 url = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
-image = Image.open(requests.get(url, stream=True).raw)
+image = Image.open(requests.get(url, stream=True, timeout=60).raw)
 
 inputs = processor(text=text_prompt, images=image, return_tensors="pt").to(device)
 
@@ -29,7 +29,7 @@ assert generation_text == ["The bus is blue.\n"]
 
 text_prompt = "What is the highest life expectancy at birth of male?\n"
 url = "https://huggingface.co/adept/fuyu-8b/resolve/main/chart.png"
-image = Image.open(requests.get(url, stream=True).raw)
+image = Image.open(requests.get(url, stream=True, timeout=60).raw)
 
 model_inputs = processor(text=text_prompt, images=image, return_tensors="pt").to(device)
 
