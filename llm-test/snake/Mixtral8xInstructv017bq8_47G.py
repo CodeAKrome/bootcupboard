@@ -1,7 +1,7 @@
 # Sure, here's a simple implementation of the classic Snake game using Python and the `curses` library:
 # ```python
-import random
 import curses
+import secrets
 
 s = curses.initscr()
 curses.curs_set(0)
@@ -50,8 +50,8 @@ while True:
         food = None
         while food is None:
             nf = [
-                random.randint(1, sh-1),
-                random.randint(1, sw-1)
+                secrets.SystemRandom().randint(1, sh-1),
+                secrets.SystemRandom().randint(1, sw-1)
             ]
             food = nf if nf not in snake else None
         w.addch(food[0], food[1], curses.ACS_PI)
