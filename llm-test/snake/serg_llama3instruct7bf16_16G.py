@@ -1,5 +1,5 @@
 import pygame
-import random
+import secrets
 
 # Initialize Pygame
 pygame.init()
@@ -52,8 +52,8 @@ while not game_over:
 
     # Check for collisions with the food
     if snake[0] == food:
-        food = (random.randint(0, WIDTH-BLOCK_SIZE) // BLOCK_SIZE * BLOCK_SIZE,
-                random.randint(0, HEIGHT-BLOCK_SIZE) // BLOCK_SIZE * BLOCK_SIZE)
+        food = (secrets.SystemRandom().randint(0, WIDTH-BLOCK_SIZE) // BLOCK_SIZE * BLOCK_SIZE,
+                secrets.SystemRandom().randint(0, HEIGHT-BLOCK_SIZE) // BLOCK_SIZE * BLOCK_SIZE)
     else:
         snake.pop()
 

@@ -1,7 +1,8 @@
 #[SYS]
 # Importing modules
-import pygame, sys, random
+import pygame, sys
 from pygame.locals import *
+import secrets
 
 # Setting up constants
 FPS = 30 # frames per second setting
@@ -23,10 +24,10 @@ DARKGRAY = (40, 40, 40)
 BGCOLOR = BLACK
 
 # Starting coordinates for initial block and apple
-startx = random.randint(5, CELLWIDTH - 6)
-starty = random.randint(5, CELLHEIGHT - 6)
-apple_x = random.randint(0, CELLWIDTH - 1)
-apple_y = random.randint(0, CELLHEIGHT - 1)
+startx = secrets.SystemRandom().randint(5, CELLWIDTH - 6)
+starty = secrets.SystemRandom().randint(5, CELLHEIGHT - 6)
+apple_x = secrets.SystemRandom().randint(0, CELLWIDTH - 1)
+apple_y = secrets.SystemRandom().randint(0, CELLHEIGHT - 1)
 
 # Initializing the snake's direction and length
 direction = RIGHT
@@ -85,8 +86,8 @@ def check_for_apple():
     global apple_x, apple_y, length
     if block_list[0] == (apple_x, apple_y):
         length += 1
-        apple_x = random.randint(0, CELLWIDTH - 1)
-        apple_y = random.randint(0, CELLHEIGHT - 1)
+        apple_x = secrets.SystemRandom().randint(0, CELLWIDTH - 1)
+        apple_y = secrets.SystemRandom().randint(0, CELLHEIGHT - 1)
 
 # Drawing the apple on the game window
 def draw_apple():

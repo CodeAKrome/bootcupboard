@@ -1,7 +1,9 @@
 #<pre>
 import random
 import turtle
-random = random.randint(0,255)
+import secrets
+
+random = secrets.SystemRandom().randint(0,255)
 turtle.setup(720, 480)
 screen=turtle.Screen()
 screen.title("Snake Game")
@@ -60,8 +62,8 @@ while True:
         for segment in snake_segments:
             segment.goto(10000000, 100000000)
     if head.distance(food)<20:
-        x=random.randint(-290, 240)
-        y=random.randint(-290, 240)
+        x=secrets.SystemRandom().randint(-290, 240)
+        y=secrets.SystemRandom().randint(-290, 240)
         food.goto(x, y)
         score += 10
     if score > high_score:
