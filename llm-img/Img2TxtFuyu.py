@@ -7,7 +7,7 @@ import fire
 PENGUINS = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
 BUS = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
 
-@profile
+#@profile
 def main(
     image_path: str = PENGUINS,
     question: str = "Generate a coco-style caption.",

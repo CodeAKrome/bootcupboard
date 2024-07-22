@@ -1,0 +1,33 @@
+ python x_StableAudioOpen.py
+Traceback (most recent call last):
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/soundfile.py", line 142, in <module>
+    raise OSError('sndfile library not found')
+OSError: sndfile library not found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/x_StableAudioOpen.py", line 10, in <module>
+    model, model_config = get_pretrained_model("stabilityai/stable-audio-open-1.0")
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/stable_audio_tools/models/pretrained.py", line 15, in get_pretrained_model
+    model = create_model_from_config(model_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/stable_audio_tools/models/factory.py", line 15, in create_model_from_config
+    from .diffusion import create_diffusion_cond_from_config
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/stable_audio_tools/models/diffusion.py", line 8, in <module>
+    from .blocks import ResConvBlock, FourierFeatures, Upsample1d, Upsample1d_2, Downsample1d, Downsample1d_2, SelfAttention1d, SkipBlock, expand_to_planes
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/stable_audio_tools/models/blocks.py", line 11, in <module>
+    from dac.nn.layers import Snake1d
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/dac/__init__.py", line 6, in <module>
+    import audiotools
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/audiotools/__init__.py", line 2, in <module>
+    from .core import AudioSignal
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/audiotools/core/__init__.py", line 2, in <module>
+    from .audio_signal import AudioSignal
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/audiotools/core/audio_signal.py", line 14, in <module>
+    import soundfile
+  File "/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/soundfile.py", line 162, in <module>
+    _snd = _ffi.dlopen(_os.path.join(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: cannot load library '/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/_soundfile_data/libsndfile.dylib': dlopen(/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/_soundfile_data/libsndfile.dylib, 0x0002): tried: '/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/_soundfile_data/libsndfile.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/_soundfile_data/libsndfile.dylib' (no such file), '/Users/kyle/hub/bootcupboard/llm-diffusion-music/.venv/lib/python3.11/site-packages/_soundfile_data/libsndfile.dylib' (no such file)

@@ -1,6 +1,9 @@
-transformers
 accelerate
-peft
 diffusers
-streamlit-keyup
 fire
+invisible_watermark
+peft
+safetensors
+streamlit-keyup
+torch
+transformers
