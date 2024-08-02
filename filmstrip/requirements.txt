@@ -1,0 +1,10 @@
+moviepy
+opencv-python
+Pillow
+scipy
+flair
+fire
+diffusers
+transformers
+accelerate
+torch

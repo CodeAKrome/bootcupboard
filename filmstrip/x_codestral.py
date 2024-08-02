@@ -1,6 +1,7 @@
 from moviepy.editor import ImageClip, concatenate_videoclips, AudioFileClip
 import os
 
+
 class VideoGenerator:
     def __init__(self, mp3_files, png_images):
         self.mp3_files = mp3_files
@@ -29,6 +30,7 @@ class VideoGenerator:
         # Write the final video to a file
         final_video.write_videofile(output_filename, fps=24)
 
-#mp3_files = ["audio1.mp3", "audio2.mp3"]  # Replace with your actual MP3 filenames
-#png_images = ["image1.png", "image2.png"]  # Replace with your actual PNG filenames
-#video_generator = VideoGenerator(mp3_files, png_images)
+
+# mp3_files = ["audio1.mp3", "audio2.mp3"]  # Replace with your actual MP3 filenames
+# png_images = ["image1.png", "image2.png"]  # Replace with your actual PNG filenames
+# video_generator = VideoGenerator(mp3_files, png_images)

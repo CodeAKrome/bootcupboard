@@ -1,0 +1,16 @@
+xformers
+invisible-watermark
+transformers
+open_clip_torch
+kornia
+opencv-python
+gradio
+torch
+einops
+fire
+omegaconf
+torchvision
+imageio
+rembg
+clip
+pytorch_lightning

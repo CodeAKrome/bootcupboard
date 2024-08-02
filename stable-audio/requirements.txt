@@ -1,0 +1,5 @@
+stable-audio-tools
+torch
+torchvision
+torchaudio
+
