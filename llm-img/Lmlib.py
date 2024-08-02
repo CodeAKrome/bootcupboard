@@ -1,7 +1,7 @@
 """ Use a multimodeal model with an Lm Studio server"""
 from openai import OpenAI
 import base64
-import requests
+from security import safe_requests
 
 TESTIMG = 'Kenwood-ts-990s.png'
 
@@ -11,7 +11,7 @@ def get_base_64_img(image):
     if "http" not in image:
         base64_image = base64.b64encode(open(image, "rb").read()).decode("utf-8")
     else:
-        response = requests.get(image)
+        response = safe_requests.get(image)
         base64_image = base64.b64encode(response.content).decode("utf-8")
     return base64_image
 

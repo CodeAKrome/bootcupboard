@@ -1,8 +1,8 @@
 from transformers import FuyuProcessor, FuyuForCausalLM
 from PIL import Image
-import requests
 import torch
 import fire
+from security import safe_requests
 
 PENGUINS = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
 BUS = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
@@ -28,7 +28,7 @@ def main(
 
     if image_path.startswith("http"):
         url = image_path
-        image = Image.open(requests.get(url, stream=True).raw)
+        image = Image.open(safe_requests.get(url, stream=True).raw)
     else:
         image = Image.open(image_path).convert("RGB")
 

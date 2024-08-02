@@ -35,11 +35,11 @@ import litellm
 import pkg_resources
 
 import getpass
-import requests
 import tokentrim as tt
 from rich import print
 from rich.markdown import Markdown
 from rich.rule import Rule
+from security import safe_requests
 
 try:
     import readline
@@ -168,7 +168,7 @@ class Interpreter:
             url = "https://open-procedures.replit.app/search/"
 
             try:
-                relevant_procedures = requests.get(url, data=json.dumps(query)).json()[
+                relevant_procedures = safe_requests.get(url, data=json.dumps(query)).json()[
                     "procedures"
                 ]
                 info += (

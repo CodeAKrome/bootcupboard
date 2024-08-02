@@ -1,7 +1,7 @@
 from transformers import FuyuProcessor, FuyuForCausalLM
 from PIL import Image
-import requests
 import torch
+from security import safe_requests
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
@@ -13,7 +13,7 @@ model = FuyuForCausalLM.from_pretrained(model_id, device_map=device)
 # prepare inputs for the model
 text_prompt = "Generate a coco-style caption.\n"
 url = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
-image = Image.open(requests.get(url, stream=True).raw)
+image = Image.open(safe_requests.get(url, stream=True).raw)
 
 inputs = processor(text=text_prompt, images=image, return_tensors="pt").to(device)
 

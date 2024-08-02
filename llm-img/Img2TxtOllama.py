@@ -1,7 +1,7 @@
 import ollama
-import requests
 import base64
 import fire
+from security import safe_requests
 
 PENGUINS = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Adelie_penguins_in_the_South_Shetland_Islands.jpg/640px-Adelie_penguins_in_the_South_Shetland_Islands.jpg"
 BUS = "https://huggingface.co/adept/fuyu-8b/resolve/main/bus.png"
@@ -47,7 +47,7 @@ def get_base_64_img(image):
     # Check if the image is a local file or a URL
     if "http" in image:
         # File on the Web: Fetch the image content from the URL, encode it in base64, and decode as UTF-8
-        response = requests.get(image)
+        response = safe_requests.get(image)
         return base64.b64encode(response.content).decode("utf-8")
     # Local File: Read the binary content of the file, encode it in base64, and decode as UTF-8
     return base64.b64encode(open(image, "rb").read()).decode("utf-8")
