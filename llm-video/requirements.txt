@@ -2,3 +2,4 @@ diffusers
 transformers
 accelerate
 torch
+opencv-python
