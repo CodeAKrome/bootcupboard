@@ -1,8 +1,10 @@
+TTS/xtts
 .env.leave
 filmstrip/video/
+filmstrip/TTS
 generative-models
 # Byte-compiled / optimized / DLL files
-TTS
+TTS/TTS
 instructor-embedding/db
 instructor-embedding/VuChromadb.py
 colbert*

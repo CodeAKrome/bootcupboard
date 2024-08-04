@@ -1,0 +1,2 @@
+PYTORCH_ENABLE_MPS_FALLBACK=1
+python x_ModelcardXttsv2Direct.py
