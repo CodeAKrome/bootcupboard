@@ -1,3 +1,6 @@
+*~
+.autoenv
+.autoenv.leave
 RealtimeSTT
 TTS/xtts
 .env.leave
