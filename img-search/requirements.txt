@@ -1,0 +1,6 @@
+chromadb
+streamlit
+Pillow
+torch
+transformers
+sentence-transformers
