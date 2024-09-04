@@ -1,2 +1,5 @@
 # for streamlit demo
 PyAudio==0.2.14
+snac
+soundfile
+whisper

@@ -16,3 +16,5 @@ gradio:
 	cd mini-omni; API_URL=http://0.0.0.0:60808/chat python3 webui/omni_gradio.py
 testrun:
 	cd mini-omni; python inference.py
+whisper:
+	pip install git+https://github.com/openai/whisper.git
