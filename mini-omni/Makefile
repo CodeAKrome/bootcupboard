@@ -1,5 +1,7 @@
 init:
 	conda create -n mini-omni python=3.10
+initcuda:
+	conda env create -f cuda39.yml -n mini-omni
 activate:
 	conda activate mini-omni
 deactivate:
