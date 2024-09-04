@@ -1,0 +1,2 @@
+# for streamlit demo
+PyAudio==0.2.14

@@ -1,0 +1,7 @@
+go program that takes a directory and type of media: video, audio, or image as arguments and outputs a list of media files of those selected types. include directions for running.
+allow for multiple media types to be selected.
+use walkdir.
+simply reporting when an error occurs and continuing instead of exiting.
+an argument to limit the depth traversed and another to limit the number of errors before exiting.
+use the cobra library.
+a help command that automatically prints when there's something wrong with the program arguments.
