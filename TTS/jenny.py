@@ -10,7 +10,7 @@ class TextToSpeechProcessor:
     def __init__(self, base_filename: str="audio/tts"):
         self.base_filename = base_filename
         self.counter = 0
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = "cuda" if torch.cuda.is_available() else "mps"
         self.tts = TTS("tts_models/en/jenny/jenny").to(self.device)
     
     def generate_filename(self):

@@ -1,0 +1,7 @@
+chromadb
+streamlit
+Pillow
+torch
+transformers
+sentence-transformers
+mysql-connector-python

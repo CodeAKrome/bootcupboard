@@ -2,10 +2,11 @@
 import base64
 import requests
 import json
+import sys
 
 TEST_IMG = 'img/Kenwood-ts-990s.png'
 
-class OllamaMultimodal:
+class OllamaImg2Txt:
     def __init__(self, model="llava", base_url="http://localhost:11434"):
         self.model = model
         self.base_url = base_url
@@ -58,13 +59,15 @@ class OllamaMultimodal:
         self.api_endpoint = f"{self.base_url}/api/generate"
 
 if __name__ == "__main__":
+    image = TEST_IMG
+    if len(sys.argv) > 1:
+        image = sys.argv[1]
     # Example usage
     ollama = OllamaMultimodal()
-
     models = ['llava', 'bakllava', 'moondream', 'llava-phi3']
     for model in models:
         # Changing model and trying again
         ollama.change_model(model)  # Assuming you have this model available
-        result = ollama.image2text(TEST_IMG, prompt="Describe this radio in detail")
+        result = ollama.image2text(image, prompt="Describe this radio in detail")
         print(f"\n{model} result:\n{result}")
         

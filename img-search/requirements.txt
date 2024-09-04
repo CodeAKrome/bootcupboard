@@ -4,3 +4,8 @@ Pillow
 torch
 transformers
 sentence-transformers
+mysql-connector-python
+tidb-vector[client]
+pymysql
+mysql
+python-dotenv
