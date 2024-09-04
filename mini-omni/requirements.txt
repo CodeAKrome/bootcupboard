@@ -3,3 +3,5 @@ PyAudio==0.2.14
 snac
 soundfile
 whisper
+git+https://github.com/openai/whisper.git
+lightning
