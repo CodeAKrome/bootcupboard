@@ -26,10 +26,10 @@ var mediaExtensions = map[string][]string{
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "media-lister [directory]",
-	Short: "List media files in a directory",
+	Use:   "media [directory]",
+	Short: "List media files in a directory and its subdirectories.",
 	Long: `A flexible media file lister that can search for various types of media files
-in a specified directory, with options to limit search depth and error tolerance.`,
+in a specified directory tree, with options to limit search depth and error tolerance.`,
 	Args: cobra.ExactArgs(1),
 	Run:  listMediaFiles,
 }
@@ -37,12 +37,18 @@ in a specified directory, with options to limit search depth and error tolerance
 func init() {
 	rootCmd.Flags().IntVar(&maxDepth, "max-depth", 0, "Maximum directory depth to traverse (0 for unlimited)")
 	rootCmd.Flags().IntVar(&maxErrors, "max-errors", 0, "Maximum number of errors before exiting (0 for unlimited)")
-	rootCmd.Flags().StringSliceVar(&mediaTypes, "types", []string{"video", "audio", "image"}, "Media types to search for")
+
+	defaultMediaTypes := make([]string, 0, len(mediaExtensions))
+	for mediaType := range mediaExtensions {
+		defaultMediaTypes = append(defaultMediaTypes, mediaType)
+	}
+
+	rootCmd.Flags().StringSliceVar(&mediaTypes, "types", defaultMediaTypes, "Media types to search for")
 }
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
@@ -52,7 +58,7 @@ func listMediaFiles(cmd *cobra.Command, args []string) {
 	validMediaTypes := validateMediaTypes(mediaTypes)
 
 	if len(validMediaTypes) == 0 {
-		fmt.Println("Error: No valid media types specified")
+		fmt.Fprintln(os.Stderr, "Error: No valid media types specified")
 		cmd.Usage()
 		os.Exit(1)
 	}
@@ -61,7 +67,7 @@ func listMediaFiles(cmd *cobra.Command, args []string) {
 
 	err := filepath.WalkDir(directory, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			fmt.Printf("Error accessing %s: %v\n", path, err)
+			fmt.Fprintf(os.Stderr, "Error accessing %s: %v\n", path, err)
 			errorsEncountered++
 			if maxErrors > 0 && errorsEncountered >= maxErrors {
 				return fmt.Errorf("maximum number of errors (%d) reached", maxErrors)
@@ -84,7 +90,7 @@ func listMediaFiles(cmd *cobra.Command, args []string) {
 			for _, mediaType := range validMediaTypes {
 				for _, validExt := range mediaExtensions[mediaType] {
 					if ext == validExt {
-						fmt.Printf("[%s] %s\n", mediaType, path)
+						fmt.Printf("%s\t%s\n", mediaType, path)
 						filesFound++
 						break
 					}
@@ -96,9 +102,9 @@ func listMediaFiles(cmd *cobra.Command, args []string) {
 
 	if err != nil {
 		if err.Error() == fmt.Sprintf("maximum number of errors (%d) reached", maxErrors) {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 		} else {
-			fmt.Printf("Error walking directory: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error walking directory: %v\n", err)
 		}
 		errorsEncountered++
 	}
@@ -112,25 +118,25 @@ func validateMediaTypes(types []string) []string {
 		if _, ok := mediaExtensions[strings.ToLower(t)]; ok {
 			validTypes = append(validTypes, strings.ToLower(t))
 		} else {
-			fmt.Printf("Warning: Invalid media type '%s' ignored\n", t)
+			fmt.Fprintf(os.Stderr, "Warning: Invalid media type '%s' ignored\n", t)
 		}
 	}
 	return validTypes
 }
 
 func printSummary(filesFound, errorsEncountered int) {
-	fmt.Printf("\nSummary:\n")
-	fmt.Printf("Files found: %d\n", filesFound)
-	fmt.Printf("Errors encountered: %d\n", errorsEncountered)
+	fmt.Fprintf(os.Stderr, "\nSummary:\n")
+	fmt.Fprintf(os.Stderr, "Files found: %d\n", filesFound)
+	fmt.Fprintf(os.Stderr, "Errors encountered: %d\n", errorsEncountered)
 	if maxDepth > 0 {
-		fmt.Printf("Maximum depth traversed: %d\n", maxDepth)
+		fmt.Fprintf(os.Stderr, "Maximum depth traversed: %d\n", maxDepth)
 	} else {
-		fmt.Println("Depth: Unlimited")
+		fmt.Fprintln(os.Stderr, "Depth: Unlimited")
 	}
 	if maxErrors > 0 {
-		fmt.Printf("Maximum errors allowed: %d\n", maxErrors)
+		fmt.Fprintf(os.Stderr, "Maximum errors allowed: %d\n", maxErrors)
 	} else {
-		fmt.Println("Error limit: Unlimited")
+		fmt.Fprintln(os.Stderr, "Error limit: Unlimited")
 	}
-	fmt.Printf("Media types searched: %v\n", mediaTypes)
+	fmt.Fprintf(os.Stderr, "Media types searched: %v\n", mediaTypes)
 }
