@@ -37,7 +37,14 @@ in a specified directory, with options to limit search depth and error tolerance
 func init() {
 	rootCmd.Flags().IntVar(&maxDepth, "max-depth", 0, "Maximum directory depth to traverse (0 for unlimited)")
 	rootCmd.Flags().IntVar(&maxErrors, "max-errors", 0, "Maximum number of errors before exiting (0 for unlimited)")
-	rootCmd.Flags().StringSliceVar(&mediaTypes, "types", []string{"video", "audio", "image"}, "Media types to search for")
+	
+	// Create a dynamic list of media types based on the keys of mediaExtensions
+	defaultMediaTypes := make([]string, 0, len(mediaExtensions))
+	for mediaType := range mediaExtensions {
+		defaultMediaTypes = append(defaultMediaTypes, mediaType)
+	}
+	
+	rootCmd.Flags().StringSliceVar(&mediaTypes, "types", defaultMediaTypes, "Media types to search for")
 }
 
 func main() {
