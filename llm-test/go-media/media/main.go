@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -26,10 +27,10 @@ var mediaExtensions = map[string][]string{
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "media [directory]",
-	Short: "List media files in a directory and its subdirectories.",
+	Use:   "media-lister [directory]",
+	Short: "List media files in a directory",
 	Long: `A flexible media file lister that can search for various types of media files
-in a specified directory tree, with options to limit search depth and error tolerance.`,
+in a specified directory, with options to limit search depth and error tolerance.`,
 	Args: cobra.ExactArgs(1),
 	Run:  listMediaFiles,
 }
@@ -63,7 +64,8 @@ func listMediaFiles(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	var filesFound, errorsEncountered int
+	filesFound := make(map[string]int)
+	var errorsEncountered int
 
 	err := filepath.WalkDir(directory, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -91,7 +93,7 @@ func listMediaFiles(cmd *cobra.Command, args []string) {
 				for _, validExt := range mediaExtensions[mediaType] {
 					if ext == validExt {
 						fmt.Printf("%s\t%s\n", mediaType, path)
-						filesFound++
+						filesFound[mediaType]++
 						break
 					}
 				}
@@ -124,9 +126,23 @@ func validateMediaTypes(types []string) []string {
 	return validTypes
 }
 
-func printSummary(filesFound, errorsEncountered int) {
+func printSummary(filesFound map[string]int, errorsEncountered int) {
 	fmt.Fprintf(os.Stderr, "\nSummary:\n")
-	fmt.Fprintf(os.Stderr, "Files found: %d\n", filesFound)
+
+	var totalFiles int
+	var mediaTypesSummary []string
+
+	for mediaType, count := range filesFound {
+		mediaTypesSummary = append(mediaTypesSummary, fmt.Sprintf("%s: %d", mediaType, count))
+		totalFiles += count
+	}
+
+	sort.Strings(mediaTypesSummary)
+	for _, summary := range mediaTypesSummary {
+		fmt.Fprintf(os.Stderr, "%s\n", summary)
+	}
+
+	fmt.Fprintf(os.Stderr, "Total files found: %d\n", totalFiles)
 	fmt.Fprintf(os.Stderr, "Errors encountered: %d\n", errorsEncountered)
 	if maxDepth > 0 {
 		fmt.Fprintf(os.Stderr, "Maximum depth traversed: %d\n", maxDepth)
