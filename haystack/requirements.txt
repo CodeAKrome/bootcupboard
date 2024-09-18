@@ -1,0 +1,6 @@
+haystack-ai
+haystack-ai[neo4j]
+haystack[ollama]
+neo4j_haystack
+chromadb
+chroma-haystack
