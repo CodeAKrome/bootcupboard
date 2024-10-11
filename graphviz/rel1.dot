@@ -1,0 +1,57 @@
+digraph {
+node[shape=box, style=filled];
+edge[dir=back, arrowtail=empty];
+
+Vladimir_Putin[label="Vladimir Putin", fillcolor=lightblue];
+Kommersant[label="Kommersant", fillcolor=lightgray];
+Russia[label="Russia", fillcolor=lightblue];
+Ukraine[label="Ukraine", fillcolor=lightgreen];
+Nato[label="Nato", fillcolor=lightgray];
+USA[label="USA", fillcolor=lightgray];
+European_states[label="European states", fillcolor=lightgray];
+St_Petersburg[label="St Petersburg", fillcolor=lightblue];
+Moscow[label="Moscow", fillcolor=lightblue];
+Crimea[label="Crimea", fillcolor=lightblue];
+West[label="West", fillcolor=lightgray];
+Sergei_Ryabkov[label="Sergei Ryabkov", fillcolor=lightblue];
+Sir_Keir_Starmer[label="Sir Keir Starmer", fillcolor=lightgreen];
+President_Biden[label="President Biden", fillcolor=lightgray];
+Washington[label="Washington", fillcolor=lightgray];
+Hungary[label="Hungary", fillcolor=lightgray];
+Fide[label="Fide", fillcolor=lightgray];
+UK[label="UK", fillcolor=lightgray];
+Kyiv[label="Kyiv", fillcolor=lightgreen];
+Iran[label="Iran", fillcolor=lightgray];
+
+Vladimir_Putin -> Kommersant[label="draws red line", color=red];
+Vladimir_Putin -> West[label="warns", color=red];
+Vladimir_Putin -> Ukraine[label="accuses of using Western missiles", color=red];
+Vladimir_Putin -> Nato[label="views as direct participant in conflict", color=red];
+Vladimir_Putin -> USA[label="views as direct participant in conflict", color=red];
+Vladimir_Putin -> European_states[label="views as direct participant in conflict", color=red];
+Vladimir_Putin -> Russia[label="pledges to respond to threats", color=blue];
+Vladimir_Putin -> St_Petersburg[label="speaks in", color=blue];
+Vladimir_Putin -> Moscow[label="represents", color=blue];
+Vladimir_Putin -> Crimea[label="views as part of Russia", color=blue];
+
+Sergei_Ryabkov -> Russia[label="represents", color=blue];
+Sergei_Ryabkov -> Nato[label="views as escalating conflict", color=red];
+
+Sir_Keir_Starmer -> President_Biden[label="meets with", color=blue];
+Sir_Keir_Starmer -> Washington[label="visits", color=blue];
+Sir_Keir_Starmer -> Ukraine[label="supports", color=blue];
+
+President_Biden -> USA[label="represents", color=blue];
+President_Biden -> Ukraine[label="supports", color=blue];
+
+West -> Ukraine[label="provides aid to", color=blue];
+West -> Russia[label="sanctions", color=red];
+
+Fide -> Hungary[label="holds general assembly in", color=blue];
+Fide -> Russia[label="considers reinstating", color=blue];
+
+UK -> Kyiv[label="visits", color=blue];
+UK -> Ukraine[label="provides aid to", color=blue];
+
+Iran -> Russia[label="supplies missiles to", color=red];
+}

@@ -1,0 +1,57 @@
+digraph relationships {
+    layout=sfdp
+    beautify=true
+    overlap_scaling=3
+    overlap=prism
+    node[shape=box, style=filled];
+
+    // People
+    Jay_Blades[label="Jay Blades"];
+    Lisa_Zbozen[label="Lisa Zbozen"];
+    Jason_Blades[label="Jason Blades"];
+    Umar_Mahmood[label="Umar Mahmood"];
+    David_Jason[label="David Jason"];
+    Freddie_Flintoff[label="Freddie Flintoff"];
+    Jeffrey_Epstein[label="Jeffrey Epstein"];
+
+    // Organizations
+    BBC[label="BBC"];
+    West_Mercia_Police[label="West Mercia Police"];
+    Kidderminster_Magistrates_Court[label="Kidderminster Magistrates' Court"];
+    Worcester_Crown_Court[label="Worcester Crown Court"];
+    Buckinghamshire_New_University[label="Buckinghamshire New University"];
+
+    // TV Shows
+    The_Repair_Shop[label="The Repair Shop"];
+    Money_for_Nothing[label="Money for Nothing"];
+    Jay_Blades_Home_Fix[label="Jay Blades' Home Fix"];
+    Jay_and_Doms_Home_Fix[label="Jay and Dom's Home Fix"];
+    Davids_and_Jays_Touring_Toolshed[label="David & Jay's Touring Toolshed"];
+    Garden_Rescue[label="Garden Rescue"];
+    Freddies_Field_of_Dreams[label="Freddie Flintoff's Field of Dreams"];
+
+    // Awards
+    National_Television_Award[label="National Television Award"];
+    Bafta[label="Bafta"];
+    MBE[label="MBE"];
+
+    // Relationships
+    Jay_Blades -> Lisa_Zbozen[label="estranged wife"];
+    Jay_Blades -> The_Repair_Shop[label="host"];
+    Jay_Blades -> West_Mercia_Police[label="charged by"];
+    Jay_Blades -> Kidderminster_Magistrates_Court[label="appeared at"];
+    Jay_Blades -> Worcester_Crown_Court[label="to appear at"];
+    Jay_Blades -> Buckinghamshire_New_University[label="resigned as chancellor"];
+    Jay_Blades -> BBC[label="worked for"];
+    Jay_Blades -> Money_for_Nothing[label="host"];
+    Jay_Blades -> Jay_Blades_Home_Fix[label="host"];
+    Jay_Blades -> Jay_and_Doms_Home_Fix[label="host"];
+    Jay_Blades -> Davids_and_Jays_Touring_Toolshed[label="co-host"];
+    Jay_Blades -> National_Television_Award[label="won"];
+    Jay_Blades -> Bafta[label="won"];
+    Jay_Blades -> MBE[label="honoured with"];
+    Umar_Mahmood -> Freddies_Field_of_Dreams[label="featured in"];
+    David_Jason -> Davids_and_Jays_Touring_Toolshed[label="co-host"];
+    Freddie_Flintoff -> Freddies_Field_of_Dreams[label="host"];
+    Jeffrey_Epstein -> BBC[label="mentioned in relation to"];
+}
