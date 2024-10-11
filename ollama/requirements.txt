@@ -1,2 +1,4 @@
+fire
+ollama
 openai
 instructor

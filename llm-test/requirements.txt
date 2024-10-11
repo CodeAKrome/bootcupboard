@@ -2,3 +2,6 @@ transformers
 torch
 accelerate
 ai2-olmo
+einops
+torchvision
+fire
