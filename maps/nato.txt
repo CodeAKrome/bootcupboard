@@ -1,0 +1,15 @@
+
+Country	Year Joined NATO	Former Warsaw Pact Member
+Czech Republic	1999	Yes
+Hungary	1999	Yes
+Poland	1999	Yes
+Bulgaria	2004	Yes
+Estonia	2004	No (formerly part of USSR)
+Latvia	2004	No (formerly part of USSR)
+Lithuania	2004	No (formerly part of USSR)
+Romania	2004	Yes
+Slovakia	2004	Yes
+Albania	2009	No
+Croatia	2009	No
+Montenegro	2017	No
+North Macedonia	2020	No
