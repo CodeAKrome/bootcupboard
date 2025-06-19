@@ -5,10 +5,15 @@ from transformers import MllamaForConditionalGeneration, AutoProcessor
 
 model_id = "meta-llama/Llama-3.2-90B-Vision-Instruct"
 
+# model = MllamaForConditionalGeneration.from_pretrained(
+#     model_id,
+#     torch_dtype=torch.bfloat16,
+#     device_map="auto",
+# )
 model = MllamaForConditionalGeneration.from_pretrained(
     model_id,
     torch_dtype=torch.bfloat16,
-    device_map="auto",
+    device_map="mps",
 )
 processor = AutoProcessor.from_pretrained(model_id)
 

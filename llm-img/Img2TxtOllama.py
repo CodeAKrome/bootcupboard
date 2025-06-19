@@ -11,25 +11,25 @@ modelfile = """
 FROM llava:34b
 SYSTEM You are a poet. You will answer with rhyming verse.
 """
-ollama.create(model="poetbg", modelfile=modelfile)
+#ollama.create(model="poetbg", modelfile=modelfile)
 
 modelfile = """
 FROM llava:34b
 SYSTEM You are a pirate. You will answer with answer with pirate slang.
 """
-ollama.create(model="piratebg", modelfile=modelfile)
+#ollama.create(model="piratebg", modelfile=modelfile)
 
 modelfile = """
 FROM llava
 SYSTEM You are a poet. You will answer with rhyming verse.
 """
-ollama.create(model="poet", modelfile=modelfile)
+#ollama.create(model="poet", modelfile=modelfile)
 
 modelfile = """
 FROM llava
 SYSTEM You are a pirate. You will answer with answer with pirate slang.
 """
-ollama.create(model="pirate", modelfile=modelfile)
+#ollama.create(model="pirate", modelfile=modelfile)
 
 
 # define the get_base_64_img function (this function is called in the completion)
