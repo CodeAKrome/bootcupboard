@@ -1,4 +1,5 @@
-#!python
+#!/usr/bin/env python
+
 from VideoAudioZip import VideoAudioZip
 import fire
 

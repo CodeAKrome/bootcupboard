@@ -1,4 +1,5 @@
-#!python
+#!/usr/bin/env python
+
 import torch
 from TTS.api import TTS
 import sys

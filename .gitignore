@@ -1,3 +1,6 @@
+filmstrip/stories
+*.mp4
+filmstrip/audio
 RealtimeSTT
 llm-test/llama3.2
 mini-omni/mini-omni
