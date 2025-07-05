@@ -3,6 +3,7 @@
 ### Make virtual environment
 ```sh
 conda create -n filmstrip python=3.10
+conda activate filmstrip
 pip install -r requirements.txt
 ```
 ## Split by sentence
