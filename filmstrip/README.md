@@ -5,6 +5,7 @@
 conda create -n filmstrip python=3.10
 conda activate filmstrip
 pip install -r requirements.txt
+pip install -r requirements_adlightning.txt
 ```
 ## Split by sentence
 ```sh
