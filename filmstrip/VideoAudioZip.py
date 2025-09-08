@@ -1,10 +1,14 @@
 import os
-from moviepy.editor import (
-    VideoFileClip,
-    AudioFileClip,
-    CompositeVideoClip,
-    concatenate_videoclips,
-)
+# from moviepy import (
+#     VideoFileClip,
+#     AudioFileClip,
+#     CompositeVideoClip,
+#     concatenate_videoclips,
+# )
+from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+from moviepy.video.compositing.concatenate import concatenate_videoclips
+#from moviepy.video.fx.loop import loop
 from moviepy.video.fx.all import loop
 import fire
 
