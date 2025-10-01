@@ -1,0 +1,9 @@
+name: kokoro
+channels:
+  - defaults
+dependencies:
+  - python==3.9       
+  - pip:
+      - kokoro>=0.3.1
+      - soundfile
+      - misaki[en]
