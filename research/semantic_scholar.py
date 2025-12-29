@@ -13,8 +13,8 @@ url = "http://api.semanticscholar.org/graph/v1/paper/search/bulk"
 # publicationDate:desc
 query_params = {
     "query": '"generative ai"',
-    "fields": "title,url,publicationTypes,publicationDate,openAccessPdf",
-    "year": "2025-",
+    "fields": "title,url,publicationTypes,publicationDate,openAccessPdf,referenceCount,citationCount,influentialCitationCount,authors,venue,year",
+    "publicationDateOrYear": "2025-10-01:",
     "sort": "citationCount:desc"
 }
 
