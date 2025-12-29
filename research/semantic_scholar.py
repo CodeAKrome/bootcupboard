@@ -11,10 +11,13 @@ url = "http://api.semanticscholar.org/graph/v1/paper/search/bulk"
 # Define the query parameters
 # citationCount:desc
 # publicationDate:desc
+
+# minCitationCount=100
+
 query_params = {
     "query": '"generative ai"',
     "fields": "title,url,publicationTypes,publicationDate,openAccessPdf,referenceCount,citationCount,influentialCitationCount,authors,venue,year,fieldsOfStudy,journal,abstract",
-    "publicationDateOrYear": "2025-10-01:",
+    "publicationDateOrYear": "2025-01-01:",
     "sort": "citationCount:desc"
 }
 
