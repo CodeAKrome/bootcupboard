@@ -1,0 +1,125 @@
+#!/usr/bin/env python
+import feedparser
+import sys
+from datetime import datetime
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
+from rich import box
+
+console = Console()
+
+def parse_date(date_input):
+    """Safely parse date from string or struct_time, return readable string or raw if failed"""
+    if not date_input:
+        return "Unknown date"
+    
+    # Case: struct_time (from feedparser *_parsed fields)
+    if hasattr(date_input, 'tm_year'):
+        try:
+            dt = datetime(*date_input[:6])
+            return dt.strftime("%B %d, %Y at %H:%M")
+        except:
+            return "Invalid parsed date"
+    
+    # Case: string
+    if isinstance(date_input, str):
+        date_str = date_input.strip()
+        try:
+            dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
+            return dt.strftime("%B %d, %Y at %H:%M")
+        except ValueError:
+            try:
+                dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %Z")
+                return dt.strftime("%B %d, %Y at %H:%M")
+            except ValueError:
+                return date_str  # fallback to raw
+
+    return "Unknown date"
+
+def print_all_fields(data, title="Data", level=0):
+    """Recursively print every field in the parsed feedparser structure using Rich tables"""
+    table = Table(title=title, show_header=True, header_style="bold magenta", box=box.ROUNDED)
+    table.add_column("Field", style="cyan", width=30)
+    table.add_column("Value", style="white")
+
+    for key in sorted(data.keys()):
+        value = data[key]
+        if isinstance(value, dict):
+            table.add_row(key, "[dim]Dictionary → see below[/]")
+            console.print(table)
+            print_all_fields(value, title=f"{title} → {key}", level=level+1)
+            table = Table(title=title, show_header=True, header_style="bold magenta", box=box.ROUNDED)
+            table.add_column("Field", style="cyan", width=30)
+            table.add_column("Value", style="white")
+        elif isinstance(value, list):
+            if len(value) == 0:
+                table.add_row(key, "[dim]Empty list[/]")
+            elif all(isinstance(i, dict) for i in value):
+                table.add_row(key, f"[dim]List of {len(value)} dictionaries → see below[/]")
+                console.print(table)
+                for i, item in enumerate(value, 1):
+                    print_all_fields(item, title=f"{title} → {key} [Item {i}]", level=level+1)
+                table = Table(title=title, show_header=True, header_style="bold magenta", box=box.ROUNDED)
+                table.add_column("Field", style="cyan", width=30)
+                table.add_column("Value", style="white")
+            else:
+                table.add_row(key, "[dim]List:[/] " + ", ".join([str(v)[:100] for v in value]))
+        else:
+            val_str = str(value)
+            if len(val_str) > 200:
+                val_str = val_str[:197] + "..."
+            table.add_row(key, val_str)
+
+    if table.rows:
+        console.print(table)
+
+if len(sys.argv) < 2:
+    console.print("[bold red]Usage:[/] python rss_dump_all.py <feed_url>")
+    sys.exit(1)
+
+url = sys.argv[1]
+console.print(f"[bold bright_cyan]Fetching feed:[/] {url}\n")
+feed = feedparser.parse(url)
+
+if feed.bozo and feed.bozo_exception:
+    console.print("[bold red]Parsing error:[/]")
+    console.print(f"{feed.bozo_exception}\n")
+
+# Top-level feed info
+console.print(Panel("[bold green]Full Parsed Feed Structure[/]", border_style="bright_green"))
+print_all_fields(feed, title="Root Feed Object")
+
+# Detailed feed metadata
+if "feed" in feed:
+    console.print("\n" + "="*80)
+    console.print(Panel("[bold blue]Feed Metadata (feed.feed)[/]", border_style="bright_blue"))
+    print_all_fields(feed.feed, title="Feed Metadata")
+
+# All entries with full fields
+if feed.entries:
+    console.print("\n" + "="*80)
+    console.print(f"[bold bright_white]All Articles ({len(feed.entries)} entries) – Every Field[/]\n")
+    for idx, entry in enumerate(feed.entries, 1):
+        console.print(Panel(f"[bold yellow]Article {idx}[/]", border_style="bright_yellow", padding=(0, 2)))
+        print_all_fields(entry, title=f"Entry {idx}")
+
+        # Special highlight for images / enclosures
+        images = []
+        if "enclosure" in entry and entry.enclosure:
+            if isinstance(entry.enclosure, list):
+                images.extend([e['url'] for e in entry.enclosure if e.get('type', '').startswith('image/')])
+            elif entry.enclosure.get('type', '').startswith('image/'):
+                images.append(entry.enclosure['url'])
+        if "media_content" in entry:
+            images.extend([m['url'] for m in entry.media_content if m.get('medium') == 'image' or 'image' in m.get('type', '')])
+        if "links" in entry:
+            images.extend([l['href'] for l in entry.links if l.get('rel') == 'enclosure' and 'image' in l.get('type', '')])
+
+        if images:
+            console.print("\n[bold bright_magenta]Images found in this article:[/]")
+            for img_url in images:
+                console.print(f"   • {img_url}")
+        console.print("\n" + "-"*60 + "\n")

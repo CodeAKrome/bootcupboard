@@ -1,0 +1,11 @@
+kokoro-onnx
+torch
+torchvision
+torchaudio
+diffusers
+transformers
+accelerate
+opencv-python
+pillow
+numpy
+soundfile
